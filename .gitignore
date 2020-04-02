@@ -1,0 +1,41 @@
+#Android 
+*.apk
+*.jks
+/local.properties
+/captures
+/build
+
+#Gradle
+gradle.properties
+.gradle
+gradlew
+gradlew.bat
+/gradle
+
+#Check
+/infer-out
+.sonar
+sonar-project.properties
+
+#Eclipse
+.project
+.classpath
+.settings
+
+#IntelliJ IDEA
+.idea
+*.iml
+classes
+
+#Maven
+target
+release.properties
+pom.xml.*
+
+#Command line
+local.properties
+build.xml
+proguard-project.txt
+
+#Mac OS
+.DS_Store
