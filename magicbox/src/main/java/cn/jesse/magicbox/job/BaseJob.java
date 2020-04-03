@@ -9,7 +9,7 @@ public abstract class BaseJob implements IJob {
     protected boolean isMonitorRunning = false;
 
     @Override
-    public void startMonitor() {
+    public void startMonitor(Object... args) {
         isMonitorRunning = true;
     }
 

@@ -37,7 +37,7 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
     }
 
     @Override
-    public void startMonitor() {
+    public void startMonitor(Object... args) {
         super.startMonitor();
         Choreographer.getInstance().postFrameCallback(this);
         mainHandler.postDelayed(this, DURATION_FPS);

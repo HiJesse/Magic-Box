@@ -11,7 +11,7 @@ public interface IJob extends Runnable {
     /**
      * 启动job监控
      */
-    void startMonitor();
+    void startMonitor(Object... args);
 
     /**
      * 关闭job监控
