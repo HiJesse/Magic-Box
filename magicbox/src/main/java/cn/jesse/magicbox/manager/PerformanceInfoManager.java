@@ -23,6 +23,7 @@ public class PerformanceInfoManager {
 
     // jobs
     private IJob fpsJob;
+    private IJob cpuJob;
 
     public static PerformanceInfoManager getInstance() {
         if (instance != null) {
@@ -41,11 +42,10 @@ public class PerformanceInfoManager {
     private PerformanceInfoManager() {
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        handler = new Handler(handlerThread.getLooper()) {
-
-        };
+        handler = new Handler(handlerThread.getLooper());
 
         fpsJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_FPS);
+        cpuJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_CPU);
     }
 
     /**
@@ -68,5 +68,27 @@ public class PerformanceInfoManager {
         }
 
         fpsJob.stopMonitor();
+    }
+
+    /**
+     * 开始监控cpu
+     */
+    public void startMonitorCPU() {
+        if (cpuJob == null || cpuJob.isMonitorRunning()) {
+            return;
+        }
+
+        cpuJob.startMonitor(handler);
+    }
+
+    /**
+     * 停止监控cpu
+     */
+    public void stopMonitorCPU() {
+        if (cpuJob == null) {
+            return;
+        }
+
+        cpuJob.stopMonitor();
     }
 }

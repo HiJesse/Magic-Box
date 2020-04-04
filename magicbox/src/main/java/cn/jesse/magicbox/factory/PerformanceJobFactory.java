@@ -3,6 +3,7 @@ package cn.jesse.magicbox.factory;
 import androidx.annotation.Nullable;
 
 import cn.jesse.magicbox.job.IJob;
+import cn.jesse.magicbox.job.PerformanceCPUJob;
 import cn.jesse.magicbox.job.PerformanceFPSJob;
 
 /**
@@ -12,6 +13,7 @@ import cn.jesse.magicbox.job.PerformanceFPSJob;
  */
 public class PerformanceJobFactory {
     public static final int TYPE_FPS = 1;
+    public static final int TYPE_CPU = 2;
 
     /**
      * 根据类型创建不同的检测job
@@ -24,6 +26,9 @@ public class PerformanceJobFactory {
         switch (flag) {
             case TYPE_FPS:
                 job = new PerformanceFPSJob();
+                break;
+            case TYPE_CPU:
+                job = new PerformanceCPUJob();
                 break;
             default:
                 // null
