@@ -24,6 +24,7 @@ public class PerformanceInfoManager {
     // jobs
     private IJob fpsJob;
     private IJob cpuJob;
+    private IJob memJob;
 
     public static PerformanceInfoManager getInstance() {
         if (instance != null) {
@@ -46,6 +47,7 @@ public class PerformanceInfoManager {
 
         fpsJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_FPS);
         cpuJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_CPU);
+        memJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_MEM);
     }
 
     /**
@@ -90,5 +92,27 @@ public class PerformanceInfoManager {
         }
 
         cpuJob.stopMonitor();
+    }
+
+    /**
+     * 开始监控mem
+     */
+    public void startMonitorMem() {
+        if (memJob == null || memJob.isMonitorRunning()) {
+            return;
+        }
+
+        memJob.startMonitor(handler);
+    }
+
+    /**
+     * 停止监控mem
+     */
+    public void stopMonitorMem() {
+        if (memJob == null) {
+            return;
+        }
+
+        memJob.stopMonitor();
     }
 }

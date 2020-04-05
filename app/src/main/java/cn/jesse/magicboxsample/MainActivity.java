@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.manager.PerformanceInfoManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -12,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MagicBox.init(getApplication());
     }
 
     @Override
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         PerformanceInfoManager.getInstance().startMonitorFPS();
         PerformanceInfoManager.getInstance().startMonitorCPU();
+        PerformanceInfoManager.getInstance().startMonitorMem();
     }
 
     @Override
@@ -26,5 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         PerformanceInfoManager.getInstance().stopMonitorFPS();
         PerformanceInfoManager.getInstance().stopMonitorCPU();
+        PerformanceInfoManager.getInstance().stopMonitorMem();
     }
 }
