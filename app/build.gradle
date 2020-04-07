@@ -25,4 +25,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     api project(path: ':magicbox')
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 }
