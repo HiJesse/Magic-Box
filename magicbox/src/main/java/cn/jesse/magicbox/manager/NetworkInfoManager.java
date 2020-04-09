@@ -54,6 +54,15 @@ public class NetworkInfoManager {
      * 设置开启网络模拟
      *
      * @param simulationEnable 是否开启
+     */
+    public void setSimulationEnable(boolean simulationEnable) {
+        this.simulationEnable = simulationEnable;
+    }
+
+    /**
+     * 设置开启网络模拟
+     *
+     * @param simulationEnable 是否开启
      * @param okHttpClient     client
      */
     public OkHttpClient setSimulationEnable(boolean simulationEnable, OkHttpClient okHttpClient) {

@@ -5,11 +5,9 @@ import android.os.SystemClock;
 import java.io.IOException;
 
 import cn.jesse.magicbox.manager.NetworkInfoManager;
-import cn.jesse.magicbox.network.okhttp.SpeedLimitRequestBody;
 import cn.jesse.magicbox.network.okhttp.SpeedLimitResponseBody;
 import okhttp3.Interceptor;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -98,11 +96,6 @@ public class SimulateNetworkInterceptor implements Interceptor {
         int requestSpeed = NetworkInfoManager.getInstance().getSimulationRequestSpeed();
 
         Request request = chain.request();
-        final RequestBody body = request.body();
-        if (body != null) {
-            final RequestBody requestBody = requestSpeed > 0 ? new SpeedLimitRequestBody(requestSpeed, body) : body;
-            request = request.newBuilder().method(request.method(), requestBody).build();
-        }
         final Response response = chain.proceed(request);
 
         final ResponseBody responseBody = response.body();
