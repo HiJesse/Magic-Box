@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 
 import cn.jesse.magicbox.MagicBox;
-import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.util.MBLog;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,10 +23,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MagicBox.init(getApplication());
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        final Request request = new Request.Builder()
-                .url("http://www.github.com")
-                .get()
-                .build();
 
         okHttpClient = MagicBox.getNetworkInfoManager().setSimulationEnable(true, okHttpClient);
 //        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_TIMEOUT);
@@ -38,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
 //        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_SPEED_LIMIT);
 //        MagicBox.getNetworkInfoManager().setSimulationRequestSpeed(100);
 
+        okHttpClient = MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true, okHttpClient);
+        MagicBox.getNetworkInfoManager().setRequestLoggerHostWhiteList(new String[]{"www.github.com"});
+
+        final Request request = new Request.Builder()
+                .url("http://www.baidu.com?test=123")
+                .get()
+                .build();
         MBLog.d(TAG, "start");
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override

@@ -1,5 +1,6 @@
 package cn.jesse.magicbox.manager;
 
+import cn.jesse.magicbox.network.okhttp.interceptor.RequestLoggerInterceptor;
 import cn.jesse.magicbox.network.okhttp.interceptor.SimulateNetworkInterceptor;
 import cn.jesse.magicbox.util.MBLog;
 import okhttp3.Interceptor;
@@ -20,12 +21,15 @@ public class NetworkInfoManager {
     private static final int SIMULATION_DEFAULT_TIMEOUT_MILLIS = 2000;
 
     private static NetworkInfoManager instance;
-    // 模拟网络
+    // ----- 模拟网络
     private boolean simulationEnable = false;
     private int simulationType = -1;
     private int simulationTimeout = SIMULATION_DEFAULT_TIMEOUT_MILLIS;
     // request限速 k/s
     private int simulationRequestSpeed = SIMULATION_DEFAULT_REQUEST_SPEED;
+    // ----- 请求信息拦截
+    private boolean requestLoggerEnable = false;
+    private String[] requestLoggerHostWhiteList;
 
     public static NetworkInfoManager getInstance() {
         if (instance != null) {
@@ -74,10 +78,8 @@ public class NetworkInfoManager {
         }
 
         for (Interceptor interceptor : okHttpClient.networkInterceptors()) {
-            if (interceptor instanceof SimulateNetworkInterceptor) {
-                if (simulationEnable) {
-                    break;
-                }
+            if (simulationEnable && interceptor instanceof SimulateNetworkInterceptor) {
+                return okHttpClient;
             }
         }
 
@@ -136,5 +138,68 @@ public class NetworkInfoManager {
      */
     public void setSimulationRequestSpeed(int simulationRequestSpeed) {
         this.simulationRequestSpeed = simulationRequestSpeed;
+    }
+
+    /**
+     * 是否已经开启了请求日志
+     *
+     * @return bool
+     */
+    public boolean isRequestLoggerEnable() {
+        return requestLoggerEnable;
+    }
+
+    /**
+     * 设置是否开启网络请求日志拦截
+     *
+     * @param requestLoggerEnable bool
+     */
+    public void setRequestLoggerEnable(boolean requestLoggerEnable) {
+        this.requestLoggerEnable = requestLoggerEnable;
+    }
+
+    /**
+     * 设置是否开启网络请求日志拦截
+     *
+     * @param requestLoggerEnable 是否开启
+     * @param okHttpClient        client
+     */
+    public OkHttpClient setRequestLoggerEnable(boolean requestLoggerEnable, OkHttpClient okHttpClient) {
+        this.requestLoggerEnable = requestLoggerEnable;
+
+        if (okHttpClient == null) {
+            MBLog.e(TAG, "setRequestLoggerEnable http client is invalid");
+            return null;
+        }
+
+        for (Interceptor interceptor : okHttpClient.interceptors()) {
+            if (requestLoggerEnable && interceptor instanceof RequestLoggerInterceptor) {
+                return okHttpClient;
+            }
+        }
+
+        if (requestLoggerEnable) {
+            okHttpClient = okHttpClient.newBuilder().addInterceptor(new RequestLoggerInterceptor()).build();
+        }
+
+        return okHttpClient;
+    }
+
+    /**
+     * 获取网络请求日志拦截域名白名单
+     *
+     * @return []
+     */
+    public String[] getRequestLoggerHostWhiteList() {
+        return requestLoggerHostWhiteList;
+    }
+
+    /**
+     * 设置网络请求日志拦截域名白名单
+     *
+     * @param requestLoggerWhiteList []
+     */
+    public void setRequestLoggerHostWhiteList(String[] requestLoggerWhiteList) {
+        this.requestLoggerHostWhiteList = requestLoggerWhiteList;
     }
 }
