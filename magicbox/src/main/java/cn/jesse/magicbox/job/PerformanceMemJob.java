@@ -9,6 +9,7 @@ import android.os.Handler;
 import java.text.DecimalFormat;
 
 import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.manager.DashboardDataManager;
 import cn.jesse.magicbox.util.MBLog;
 
 /**
@@ -20,8 +21,6 @@ public class PerformanceMemJob extends BaseJob {
     private static final String TAG = "PerformanceMemJob";
     private static final int DURATION_MEM = 500;
 
-    // 最近app 内存使用 MB
-    private float lastMemInfo;
     private ActivityManager activityManager;
     private Handler handler;
     private DecimalFormat rateFormat = new DecimalFormat("#.00");
@@ -32,10 +31,12 @@ public class PerformanceMemJob extends BaseJob {
 
     @Override
     public void run() {
-        lastMemInfo = getAppMemory();
+        // 最近app 内存使用 MB
+        float lastMemInfo = getAppMemory();
         lastMemInfo = Float.parseFloat(rateFormat.format(lastMemInfo));
 
-        MBLog.d(TAG, "mem: " + lastMemInfo);
+        // 更新数据
+        DashboardDataManager.getInstance().updateMemUsage(lastMemInfo);
         handler.postDelayed(this, DURATION_MEM);
     }
 
@@ -55,10 +56,6 @@ public class PerformanceMemJob extends BaseJob {
     public void stopMonitor() {
         super.stopMonitor();
         handler = null;
-    }
-
-    public float getLastMemInfo() {
-        return lastMemInfo;
     }
 
     private float getAppMemory() {

@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Choreographer;
 
-import cn.jesse.magicbox.util.MBLog;
+import cn.jesse.magicbox.manager.DashboardDataManager;
 
 /**
  * app 帧率监控job
@@ -17,8 +17,6 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
     private static final int DURATION_FPS = 1000;
 
     private int totalFramesPerSecond;
-    private static final int MAX_FRAME_RATE = 60;
-    private int lastFrameRate = MAX_FRAME_RATE;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -29,9 +27,10 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
 
     @Override
     public void run() {
-        lastFrameRate = totalFramesPerSecond;
+        int lastFrameRate = totalFramesPerSecond;
 
-        MBLog.d(TAG, "fps: " + lastFrameRate);
+        // 更新数据
+        DashboardDataManager.getInstance().updateFPS(lastFrameRate);
         totalFramesPerSecond = 0;
         mainHandler.postDelayed(this, DURATION_FPS);
     }
@@ -48,9 +47,5 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
         super.stopMonitor();
         Choreographer.getInstance().removeFrameCallback(this);
         mainHandler.removeCallbacks(this);
-    }
-
-    public int getLastFrameRate() {
-        return lastFrameRate;
     }
 }

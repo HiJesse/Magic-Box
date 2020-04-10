@@ -1,12 +1,15 @@
 package cn.jesse.magicboxsample;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
 import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.data.PerformanceData;
+import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.util.MBLog;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -14,15 +17,20 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MagicBox.OnDashboardDataListener {
     private final static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MagicBox.init(getApplication());
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
+
+        // -- 初始化
+        MagicBox.init(getApplication());
+        MagicBox.getPerformanceManager().startMonitorFPS();
+        MagicBox.getPerformanceManager().startMonitorCPU();
+        MagicBox.getPerformanceManager().startMonitorMem();
 
         okHttpClient = MagicBox.getNetworkInfoManager().setSimulationEnable(true, okHttpClient);
 //        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_TIMEOUT);
@@ -57,16 +65,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MagicBox.getPerformanceManager().startMonitorFPS();
-        MagicBox.getPerformanceManager().startMonitorCPU();
-        MagicBox.getPerformanceManager().startMonitorMem();
+        MagicBox.registerDashboardData(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MagicBox.unregisterDashboardData(this);
+    }
+
+    @Override
+    protected void onDestroy() {
         MagicBox.getPerformanceManager().stopMonitorFPS();
         MagicBox.getPerformanceManager().stopMonitorCPU();
         MagicBox.getPerformanceManager().stopMonitorMem();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPerformance(PerformanceData performanceData) {
+        Log.d(TAG, performanceData.toString());
+    }
+
+    @Override
+    public void onHttpRequestLog(RequestLoggerData loggerData) {
+        Log.d(TAG, loggerData.toString());
     }
 }

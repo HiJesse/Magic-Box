@@ -7,8 +7,9 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.net.URLDecoder;
 
+import cn.jesse.magicbox.data.RequestLoggerData;
+import cn.jesse.magicbox.manager.DashboardDataManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
-import cn.jesse.magicbox.network.data.RequestLoggerData;
 import cn.jesse.magicbox.util.ContentTypeUtil;
 import cn.jesse.magicbox.util.MBLog;
 import okhttp3.Interceptor;
@@ -58,9 +59,8 @@ public class RequestLoggerInterceptor implements Interceptor {
 
         requestLoggerData.setCode(response.code());
         requestLoggerData.setDuration(System.currentTimeMillis() - startTime);
-
-        MBLog.d(TAG, requestLoggerData.toString());
-
+        // 更新数据
+        DashboardDataManager.getInstance().updateNetworkRequestLog(requestLoggerData);
 
         return response;
     }

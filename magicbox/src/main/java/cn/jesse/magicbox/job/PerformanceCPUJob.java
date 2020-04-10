@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 
+import cn.jesse.magicbox.manager.DashboardDataManager;
 import cn.jesse.magicbox.util.MBLog;
 
 /**
@@ -30,13 +31,13 @@ public class PerformanceCPUJob extends BaseJob {
     private RandomAccessFile appCPUStateFile;
     private RandomAccessFile systemCPUStateFile;
 
-    // 最近app cpu使用率
-    private float lastCPURate;
     private Handler handler;
     private DecimalFormat rateFormat = new DecimalFormat("#.00");
 
     @Override
     public void run() {
+        // 最近app cpu使用率
+        float lastCPURate;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             lastCPURate = getCPURateAfterO();
         } else {
@@ -44,7 +45,8 @@ public class PerformanceCPUJob extends BaseJob {
         }
 
         lastCPURate = Float.parseFloat(rateFormat.format(lastCPURate));
-        MBLog.d(TAG, "cpu: " + lastCPURate);
+        // 更新数据
+        DashboardDataManager.getInstance().updateCPUUsage(lastCPURate);
         if (handler != null) {
             handler.postDelayed(this, DURATION_CPU);
         }
@@ -66,10 +68,6 @@ public class PerformanceCPUJob extends BaseJob {
     public void stopMonitor() {
         super.stopMonitor();
         handler = null;
-    }
-
-    public float getLastCPURate() {
-        return lastCPURate;
     }
 
     /**

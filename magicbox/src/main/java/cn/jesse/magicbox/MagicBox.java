@@ -7,6 +7,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import cn.jesse.magicbox.data.PerformanceData;
+import cn.jesse.magicbox.data.RequestLoggerData;
+import cn.jesse.magicbox.manager.DashboardDataManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.manager.PerformanceInfoManager;
 
@@ -52,5 +55,42 @@ public class MagicBox {
      */
     public static NetworkInfoManager getNetworkInfoManager() {
         return NetworkInfoManager.getInstance();
+    }
+
+    /**
+     * 注册仪表盘数据回调
+     *
+     * @param listener listener
+     */
+    public static void registerDashboardData(OnDashboardDataListener listener) {
+        DashboardDataManager.getInstance().register(listener);
+    }
+
+    /**
+     * 注销仪表盘数据回调
+     *
+     * @param listener listener
+     */
+    public static void unregisterDashboardData(OnDashboardDataListener listener) {
+        DashboardDataManager.getInstance().unRegister(listener);
+    }
+
+    /**
+     * Magic Box所有数据监听. UI 线程回调.
+     */
+    public interface OnDashboardDataListener {
+        /**
+         * 性能相关数据回调
+         *
+         * @param performanceData 性能
+         */
+        void onPerformance(PerformanceData performanceData);
+
+        /**
+         * 网络请求拦截日志回调
+         *
+         * @param loggerData 拦截日志
+         */
+        void onHttpRequestLog(RequestLoggerData loggerData);
     }
 }

@@ -1,4 +1,4 @@
-package cn.jesse.magicbox.network.data;
+package cn.jesse.magicbox.data;
 
 import java.io.Serializable;
 
@@ -70,7 +70,7 @@ public class RequestLoggerData implements Serializable {
                 "method='" + method + ' ' +
                 ", code=" + code +
                 ", duration=" + duration +
-                ", host='" + host + ' ' +
+                "ms, host='" + host + ' ' +
                 ", path='" + path + ' ' +
                 ", params='" + params + ' ' +
                 '}';
