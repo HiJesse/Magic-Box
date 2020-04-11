@@ -67,7 +67,10 @@ public class PerformanceCPUJob extends BaseJob {
     @Override
     public void stopMonitor() {
         super.stopMonitor();
-        handler = null;
+        if (handler != null) {
+            handler.removeCallbacks(this);
+            handler = null;
+        }
     }
 
     /**

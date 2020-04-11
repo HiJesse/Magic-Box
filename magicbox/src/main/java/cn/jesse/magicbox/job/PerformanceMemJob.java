@@ -37,7 +37,9 @@ public class PerformanceMemJob extends BaseJob {
 
         // 更新数据
         DashboardDataManager.getInstance().updateMemUsage(lastMemInfo);
-        handler.postDelayed(this, DURATION_MEM);
+        if (handler != null) {
+            handler.postDelayed(this, DURATION_MEM);
+        }
     }
 
     @Override
@@ -55,7 +57,10 @@ public class PerformanceMemJob extends BaseJob {
     @Override
     public void stopMonitor() {
         super.stopMonitor();
-        handler = null;
+        if (handler != null) {
+            handler.removeCallbacks(this);
+            handler = null;
+        }
     }
 
     private float getAppMemory() {
