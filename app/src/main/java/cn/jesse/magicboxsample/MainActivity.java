@@ -66,12 +66,14 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
     protected void onResume() {
         super.onResume();
         MagicBox.registerDashboardData(this);
+        MagicBox.getDashboard().showDashboard();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         MagicBox.unregisterDashboardData(this);
+        MagicBox.getDashboard().dismissDashboard();
     }
 
     @Override

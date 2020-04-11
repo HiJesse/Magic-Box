@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.manager.DashboardDataManager;
+import cn.jesse.magicbox.manager.DashboardViewManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.manager.PerformanceInfoManager;
 
@@ -27,6 +28,7 @@ public class MagicBox {
 
     public static void init(@NonNull Application app) {
         application = app;
+        DashboardViewManager.getInstance().init(app);
     }
 
     public static @Nullable
@@ -73,6 +75,15 @@ public class MagicBox {
      */
     public static void unregisterDashboardData(OnDashboardDataListener listener) {
         DashboardDataManager.getInstance().unRegister(listener);
+    }
+
+    /**
+     * 返回仪表盘 弹窗
+     *
+     * @return dashboard dialog
+     */
+    public static DashboardViewManager getDashboard() {
+        return DashboardViewManager.getInstance();
     }
 
     /**
