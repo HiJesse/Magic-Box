@@ -72,21 +72,47 @@ public class DashboardDataManager {
         dashboardDataListeners.remove(listener);
     }
 
-    public void updateCPUUsage(float cpuUsage) {
+    /**
+     * 更新cpu信息
+     *
+     * @param enable   是否正在监听
+     * @param cpuUsage 使用情况
+     */
+    public void updateCPUUsage(boolean enable, float cpuUsage) {
+        dashboardData.getPerformanceData().setCpuMonitorEnable(enable);
         dashboardData.getPerformanceData().setCurrentCPUUsage(cpuUsage);
         updatePerformance();
     }
 
-    public void updateMemUsage(float memUsage) {
+    /**
+     * 更新mem信息
+     *
+     * @param enable   是否正在监听
+     * @param memUsage 使用情况
+     */
+    public void updateMemUsage(boolean enable, float memUsage) {
+        dashboardData.getPerformanceData().setMemMonitorEnable(enable);
         dashboardData.getPerformanceData().setCurrentMemUsage(memUsage);
         updatePerformance();
     }
 
-    public void updateFPS(int fps) {
+    /**
+     * 更新fps信息
+     *
+     * @param enable 是否正在监听
+     * @param fps    帧率
+     */
+    public void updateFPS(boolean enable, int fps) {
+        dashboardData.getPerformanceData().setFpsMonitorEnable(enable);
         dashboardData.getPerformanceData().setCurrentFPS(fps);
         updatePerformance();
     }
 
+    /**
+     * 更新网络拦截日志信息
+     *
+     * @param data 日志
+     */
     public void updateNetworkRequestLog(RequestLoggerData data) {
         dashboardData.setNetworkLoggerData(data);
 

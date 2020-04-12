@@ -59,6 +59,7 @@ public class RequestLoggerInterceptor implements Interceptor {
 
         requestLoggerData.setCode(response.code());
         requestLoggerData.setDuration(System.currentTimeMillis() - startTime);
+        requestLoggerData.setEnable(true);
         // 更新数据
         DashboardDataManager.getInstance().updateNetworkRequestLog(requestLoggerData);
 

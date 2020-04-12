@@ -36,7 +36,7 @@ public class PerformanceMemJob extends BaseJob {
         lastMemInfo = Float.parseFloat(rateFormat.format(lastMemInfo));
 
         // 更新数据
-        DashboardDataManager.getInstance().updateMemUsage(lastMemInfo);
+        DashboardDataManager.getInstance().updateMemUsage(true, lastMemInfo);
         if (handler != null) {
             handler.postDelayed(this, DURATION_MEM);
         }
@@ -49,6 +49,7 @@ public class PerformanceMemJob extends BaseJob {
             return;
         }
         super.startMonitor();
+        DashboardDataManager.getInstance().updateMemUsage(true, 0);
 
         handler = (Handler) args[0];
         handler.postDelayed(this, DURATION_MEM);
@@ -61,6 +62,7 @@ public class PerformanceMemJob extends BaseJob {
             handler.removeCallbacks(this);
             handler = null;
         }
+        DashboardDataManager.getInstance().updateMemUsage(false, 0);
     }
 
     private float getAppMemory() {

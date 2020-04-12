@@ -8,9 +8,25 @@ import java.io.Serializable;
  * @author jesse
  */
 public class PerformanceData implements Serializable {
+    private boolean cpuMonitorEnable = false;
     private float currentCPUUsage;
+    private boolean memMonitorEnable = false;
     private float currentMemUsage;
+    private boolean fpsMonitorEnable = false;
     private int currentFPS;
+
+    /**
+     * 当前是否监听cpu
+     *
+     * @return bool
+     */
+    public boolean isCpuMonitorEnable() {
+        return cpuMonitorEnable;
+    }
+
+    public void setCpuMonitorEnable(boolean cpuMonitorEnable) {
+        this.cpuMonitorEnable = cpuMonitorEnable;
+    }
 
     /**
      * 获取当前cpu使用率
@@ -26,6 +42,19 @@ public class PerformanceData implements Serializable {
     }
 
     /**
+     * 当前是否监听mem
+     *
+     * @return bool
+     */
+    public boolean isMemMonitorEnable() {
+        return memMonitorEnable;
+    }
+
+    public void setMemMonitorEnable(boolean memMonitorEnable) {
+        this.memMonitorEnable = memMonitorEnable;
+    }
+
+    /**
      * 获取当前内存占用
      *
      * @return MB
@@ -36,6 +65,19 @@ public class PerformanceData implements Serializable {
 
     public void setCurrentMemUsage(float currentMemUsage) {
         this.currentMemUsage = currentMemUsage;
+    }
+
+    /**
+     * 当前是否监听fps
+     *
+     * @return bool
+     */
+    public boolean isFpsMonitorEnable() {
+        return fpsMonitorEnable;
+    }
+
+    public void setFpsMonitorEnable(boolean fpsMonitorEnable) {
+        this.fpsMonitorEnable = fpsMonitorEnable;
     }
 
     /**

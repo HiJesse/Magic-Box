@@ -46,7 +46,7 @@ public class PerformanceCPUJob extends BaseJob {
 
         lastCPURate = Float.parseFloat(rateFormat.format(lastCPURate));
         // 更新数据
-        DashboardDataManager.getInstance().updateCPUUsage(lastCPURate);
+        DashboardDataManager.getInstance().updateCPUUsage(true, lastCPURate);
         if (handler != null) {
             handler.postDelayed(this, DURATION_CPU);
         }
@@ -59,6 +59,7 @@ public class PerformanceCPUJob extends BaseJob {
             return;
         }
         super.startMonitor();
+        DashboardDataManager.getInstance().updateCPUUsage(true, 0);
 
         handler = (Handler) args[0];
         handler.postDelayed(this, DURATION_CPU);
@@ -71,6 +72,7 @@ public class PerformanceCPUJob extends BaseJob {
             handler.removeCallbacks(this);
             handler = null;
         }
+        DashboardDataManager.getInstance().updateCPUUsage(false, 0);
     }
 
     /**

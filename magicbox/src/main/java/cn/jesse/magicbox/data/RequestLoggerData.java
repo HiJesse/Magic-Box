@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @author jesse
  */
 public class RequestLoggerData implements Serializable {
+    private boolean enable = false;
     private String method;
     private int code;
     private String host;
@@ -15,6 +16,14 @@ public class RequestLoggerData implements Serializable {
     private String params;
     // 请求耗时 ms
     private long duration;
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     public String getMethod() {
         return method;

@@ -30,7 +30,7 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
         int lastFrameRate = totalFramesPerSecond;
 
         // 更新数据
-        DashboardDataManager.getInstance().updateFPS(lastFrameRate);
+        DashboardDataManager.getInstance().updateFPS(true, lastFrameRate);
         totalFramesPerSecond = 0;
         mainHandler.postDelayed(this, DURATION_FPS);
     }
@@ -38,6 +38,7 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
     @Override
     public void startMonitor(Object... args) {
         super.startMonitor();
+        DashboardDataManager.getInstance().updateFPS(true, 0);
         Choreographer.getInstance().postFrameCallback(this);
         mainHandler.postDelayed(this, DURATION_FPS);
     }
@@ -47,5 +48,6 @@ public class PerformanceFPSJob extends BaseJob implements Choreographer.FrameCal
         super.stopMonitor();
         Choreographer.getInstance().removeFrameCallback(this);
         mainHandler.removeCallbacks(this);
+        DashboardDataManager.getInstance().updateFPS(false, 0);
     }
 }
