@@ -1,8 +1,11 @@
 package cn.jesse.magicbox.manager;
 
 import android.app.Application;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import androidx.annotation.NonNull;
 
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.util.MBLog;
+import cn.jesse.magicbox.util.MBPlatformUtil;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -55,7 +59,7 @@ public class DashboardViewManager {
     }
 
     /**
-     * 显示仪表盘弹窗
+     * 显示仪表盘弹窗, 会校验系统弹窗权限
      */
     public synchronized void showDashboard() {
         if (application == null) {
@@ -65,6 +69,14 @@ public class DashboardViewManager {
 
         if (isShowing()) {
             MBLog.d(TAG, "dialog is showing");
+            return;
+        }
+
+        if (!checkOverlayPermission()) {
+            MBPlatformUtil.toast("请授权系统弹窗权限");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                application.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + application.getPackageName())));
+            }
             return;
         }
 
@@ -129,5 +141,16 @@ public class DashboardViewManager {
 
         LayoutInflater layoutInflater = LayoutInflater.from(application);
         dashboardRootView = layoutInflater.inflate(R.layout.dialog_dashboard, null);
+    }
+
+    private boolean checkOverlayPermission() {
+        if (application == null) {
+            return false;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return Settings.canDrawOverlays(application);
+        }
+
+        return true;
     }
 }

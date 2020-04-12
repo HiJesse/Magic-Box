@@ -26,6 +26,11 @@ public class MagicBox {
         // unused
     }
 
+    /**
+     * 初始化Magic Box
+     *
+     * @param app application
+     */
     public static void init(@NonNull Application app) {
         application = app;
         DashboardViewManager.getInstance().init(app);

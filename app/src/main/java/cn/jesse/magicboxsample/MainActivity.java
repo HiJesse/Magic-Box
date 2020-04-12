@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
         okHttpClient = MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true, okHttpClient);
         MagicBox.getNetworkInfoManager().setRequestLoggerHostWhiteList(new String[]{"www.github.com"});
 
+        MagicBox.registerDashboardData(this);
+        MagicBox.getDashboard().showDashboard();
+
         final Request request = new Request.Builder()
                 .url("http://www.baidu.com?test=123")
                 .get()
@@ -63,24 +66,12 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MagicBox.registerDashboardData(this);
-        MagicBox.getDashboard().showDashboard();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MagicBox.unregisterDashboardData(this);
-        MagicBox.getDashboard().dismissDashboard();
-    }
-
-    @Override
     protected void onDestroy() {
         MagicBox.getPerformanceManager().stopMonitorFPS();
         MagicBox.getPerformanceManager().stopMonitorCPU();
         MagicBox.getPerformanceManager().stopMonitorMem();
+        MagicBox.unregisterDashboardData(this);
+        MagicBox.getDashboard().dismissDashboard();
         super.onDestroy();
     }
 
