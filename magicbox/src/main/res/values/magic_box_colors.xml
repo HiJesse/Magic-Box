@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="dashboard_bg">#1a000000</color>
+
+    <color name="dashboard_performance_title">#4A4A4A</color>
+    <color name="dashboard_performance_cpu_value">#FF0000</color>
+    <color name="dashboard_performance_mem_value">#0000FF</color>
+    <color name="dashboard_performance_fps_value">#008000</color>
+
+    <color name="dashboard_net_logger_content">#66000000</color>
+
+</resources>

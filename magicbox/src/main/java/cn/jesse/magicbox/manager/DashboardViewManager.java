@@ -7,15 +7,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.Gravity;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import cn.jesse.magicbox.R;
+import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.data.PerformanceData;
+import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.util.MBLog;
 import cn.jesse.magicbox.util.MBPlatformUtil;
+import cn.jesse.magicbox.view.DashboardView;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -24,14 +26,14 @@ import static android.content.Context.WINDOW_SERVICE;
  *
  * @author jesse
  */
-public class DashboardViewManager {
+public class DashboardViewManager implements MagicBox.OnDashboardDataListener {
     private static final String TAG = "DashboardViewManager";
     private static DashboardViewManager instance;
 
     private Application application;
     private WindowManager windowManager;
     private WindowManager.LayoutParams layoutParams;
-    private View dashboardRootView;
+    private DashboardView dashboardView;
 
     private boolean showing = false;
 
@@ -82,15 +84,22 @@ public class DashboardViewManager {
 
         initDashboard();
 
+        if (dashboardView == null || dashboardView.getDashboardRootView() == null) {
+            MBLog.e(TAG, "showDashboard root view init failed");
+            return;
+        }
+
         showing = true;
-        windowManager.addView(dashboardRootView, layoutParams);
+        MagicBox.registerDashboardData(this);
+        windowManager.addView(dashboardView.getDashboardRootView(), layoutParams);
     }
 
     /**
      * 隐藏仪表盘弹窗
      */
     public synchronized void dismissDashboard() {
-        if (application == null || windowManager == null) {
+        MagicBox.unregisterDashboardData(this);
+        if (application == null || dashboardView == null || dashboardView.getDashboardRootView() == null) {
             MBLog.e(TAG, "dismissDashboard should init with valid application");
             return;
         }
@@ -100,7 +109,7 @@ public class DashboardViewManager {
             return;
         }
 
-        windowManager.removeViewImmediate(dashboardRootView);
+        windowManager.removeViewImmediate(dashboardView.getDashboardRootView());
         showing = false;
     }
 
@@ -113,14 +122,35 @@ public class DashboardViewManager {
         return showing;
     }
 
+    @Override
+    public void onPerformance(PerformanceData performanceData) {
+        if (performanceData == null || !isShowing() || dashboardView == null) {
+            return;
+        }
+
+        dashboardView.onPerformance(performanceData);
+    }
+
+    @Override
+    public void onHttpRequestLog(RequestLoggerData loggerData) {
+        if (loggerData == null || !isShowing() || dashboardView == null) {
+            return;
+        }
+
+        dashboardView.onHttpRequestLog(loggerData);
+    }
+
     private void initDashboard() {
         if (windowManager != null) {
             return;
         }
 
         windowManager = (WindowManager) application.getSystemService(WINDOW_SERVICE);
+        // 计算屏幕信息
         DisplayMetrics outMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
+        int screenWidth = outMetrics.widthPixels;
+        int screenHeight = outMetrics.heightPixels;
 
         layoutParams = new WindowManager.LayoutParams();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -129,18 +159,18 @@ public class DashboardViewManager {
             layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
         layoutParams.format = PixelFormat.RGBA_8888;
+        layoutParams.gravity = Gravity.TOP;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        layoutParams.width = outMetrics.widthPixels;
-        layoutParams.height = outMetrics.heightPixels;
+        layoutParams.width = screenWidth;
+        layoutParams.height = screenHeight * 4 / 5;
         layoutParams.x = 0;
         layoutParams.y = 0;
 
-        if (dashboardRootView != null) {
+        if (dashboardView != null) {
             return;
         }
 
-        LayoutInflater layoutInflater = LayoutInflater.from(application);
-        dashboardRootView = layoutInflater.inflate(R.layout.dialog_dashboard, null);
+        dashboardView = new DashboardView(application);
     }
 
     private boolean checkOverlayPermission() {

@@ -2,11 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:background="@color/dashboard_bg"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test" />
+    <LinearLayout
+        android:id="@+id/ll_fps_root"
+        style="@style/dashboardPerformanceItem">
+
+        <TextView
+            style="@style/dashboardPerformanceTitleText"
+            android:text="FPS:" />
+
+        <TextView
+            android:id="@+id/tv_current_fps"
+            style="@style/dashboardPerformanceValueText"
+            android:textColor="@color/dashboard_performance_fps_value" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_cpu_root"
+        style="@style/dashboardPerformanceItem">
+
+        <TextView
+            style="@style/dashboardPerformanceTitleText"
+            android:text="CPU:" />
+
+        <TextView
+            android:id="@+id/tv_current_cpu"
+            style="@style/dashboardPerformanceValueText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_mem_root"
+        style="@style/dashboardPerformanceItem">
+
+        <TextView
+            style="@style/dashboardPerformanceTitleText"
+            android:text="MEM:" />
+
+        <TextView
+            android:id="@+id/tv_current_mem"
+            style="@style/dashboardPerformanceValueText"
+            android:textColor="@color/dashboard_performance_mem_value" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/sv_net_logger"
+        style="@style/dashboardNetLoggerScrollView">
+
+        <TextView
+            android:id="@+id/tv_net_logger"
+            style="@style/dashboardNetLoggerScrollViewText" />
+
+    </ScrollView>
 
 </LinearLayout>

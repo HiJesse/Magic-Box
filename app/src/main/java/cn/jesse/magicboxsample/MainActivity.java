@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
         MagicBox.getDashboard().showDashboard();
 
         final Request request = new Request.Builder()
-                .url("http://www.baidu.com?test=123")
+                .url("https://www.baidu.com/s?wd=android+developer")
                 .get()
                 .build();
         MBLog.d(TAG, "start");
