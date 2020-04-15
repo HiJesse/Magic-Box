@@ -77,7 +77,9 @@ public class DashboardViewManager implements MagicBox.OnDashboardDataListener {
         if (!checkOverlayPermission()) {
             MBPlatformUtil.toast("请授权系统弹窗权限");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                application.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + application.getPackageName())));
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + application.getPackageName()));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                application.startActivity(intent);
             }
             return;
         }

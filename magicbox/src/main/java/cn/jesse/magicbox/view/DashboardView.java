@@ -16,6 +16,7 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
     // 性能信息
     private View cpuRootView;
     private TextView cpuCurrentUsageView;
+    private PerformanceChartView cpuChartView;
 
     private View memRootView;
     private TextView memCurrentUsageView;
@@ -33,6 +34,8 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         // 性能信息view
         cpuRootView = dashboardRootView.findViewById(R.id.ll_cpu_root);
         cpuCurrentUsageView = dashboardRootView.findViewById(R.id.tv_current_cpu);
+        cpuChartView = dashboardRootView.findViewById(R.id.cv_cpu);
+        cpuChartView.setLineColor(R.color.dashboard_performance_cpu_value);
 
         memRootView = dashboardRootView.findViewById(R.id.ll_mem_root);
         memCurrentUsageView = dashboardRootView.findViewById(R.id.tv_current_mem);
@@ -55,6 +58,7 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         if (performanceData.isCpuMonitorEnable()) {
             cpuRootView.setVisibility(View.VISIBLE);
             cpuCurrentUsageView.setText(String.format("%.2f%%", performanceData.getCurrentCPUUsage()));
+            cpuChartView.updateCPUUsage(performanceData.getCurrentCPUUsage());
         } else {
             cpuRootView.setVisibility(View.GONE);
         }
