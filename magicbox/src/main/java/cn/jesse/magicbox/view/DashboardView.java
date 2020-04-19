@@ -20,9 +20,11 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
 
     private View memRootView;
     private TextView memCurrentUsageView;
+    private PerformanceChartView memChartView;
 
     private View fpsRootView;
     private TextView fpsCurrentUsageView;
+    private PerformanceChartView fpsChartView;
 
     // 网络拦截日志
     private ScrollView netLoggerScrollview;
@@ -39,9 +41,13 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
 
         memRootView = dashboardRootView.findViewById(R.id.ll_mem_root);
         memCurrentUsageView = dashboardRootView.findViewById(R.id.tv_current_mem);
+        memChartView = dashboardRootView.findViewById(R.id.cv_mem);
+        memChartView.setLineColor(R.color.dashboard_performance_mem_value);
 
         fpsRootView = dashboardRootView.findViewById(R.id.ll_fps_root);
         fpsCurrentUsageView = dashboardRootView.findViewById(R.id.tv_current_fps);
+        fpsChartView = dashboardRootView.findViewById(R.id.cv_fps);
+        fpsChartView.setLineColor(R.color.dashboard_performance_fps_value);
 
         // 网络拦截日志
         netLoggerScrollview = dashboardRootView.findViewById(R.id.sv_net_logger);
@@ -66,6 +72,7 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         if (performanceData.isMemMonitorEnable()) {
             memRootView.setVisibility(View.VISIBLE);
             memCurrentUsageView.setText(String.format("%.2f MB", performanceData.getCurrentMemUsage()));
+            memChartView.updateMemUsage(performanceData.getCurrentMemUsage());
         } else {
             memRootView.setVisibility(View.GONE);
         }
@@ -73,6 +80,7 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         if (performanceData.isFpsMonitorEnable()) {
             fpsRootView.setVisibility(View.VISIBLE);
             fpsCurrentUsageView.setText(String.format("%d FPS/s", performanceData.getCurrentFPS()));
+            fpsChartView.updateFPS(performanceData.getCurrentFPS());
         } else {
             fpsRootView.setVisibility(View.GONE);
         }

@@ -27,6 +27,10 @@
 
         </LinearLayout>
 
+        <cn.jesse.magicbox.view.PerformanceChartView
+            android:id="@+id/cv_fps"
+            style="@style/dashboardPerformanceChartView" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -73,6 +77,10 @@
                 android:textColor="@color/dashboard_performance_mem_value" />
 
         </LinearLayout>
+
+        <cn.jesse.magicbox.view.PerformanceChartView
+            android:id="@+id/cv_mem"
+            style="@style/dashboardPerformanceChartView" />
 
     </LinearLayout>
 

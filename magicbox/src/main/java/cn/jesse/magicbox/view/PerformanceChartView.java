@@ -13,6 +13,8 @@ import androidx.annotation.ColorRes;
 
 import java.util.LinkedList;
 
+import cn.jesse.magicbox.util.MBPlatformUtil;
+
 /**
  * 性能线图
  *
@@ -77,6 +79,33 @@ public class PerformanceChartView extends View {
         invalidate();
     }
 
+    /**
+     * 更新并刷新内存使用率
+     *
+     * @param memUsage mem
+     */
+    public void updateMemUsage(float memUsage) {
+        float totalMem = MBPlatformUtil.getAppTotalMem();
+        if (totalMem == 0) {
+            return;
+        }
+
+        int pointY = (int) (height * (1 - memUsage / totalMem));
+        points.offer(new Point(0, pointY));
+        invalidate();
+    }
+
+    /**
+     * 更新并刷新fps
+     *
+     * @param fps fps
+     */
+    public void updateFPS(int fps) {
+        int pointY = height * (65 - fps) / 30;
+        points.offer(new Point(0, pointY));
+        invalidate();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -112,8 +141,9 @@ public class PerformanceChartView extends View {
     private void init() {
         xyLinePaint = new Paint();
         xyLinePaint.setStrokeWidth(2);
-        linePaint = new Paint();
 
+        linePaint = new Paint();
+        xyLinePaint.setStrokeWidth(4);
         linePaint.setAntiAlias(true);
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setColor(Color.BLACK);
