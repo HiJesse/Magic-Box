@@ -113,23 +113,14 @@ public class DashboardDataManager {
      *
      * @param data 日志
      */
-    public void updateNetworkRequestLog(RequestLoggerData data) {
+    public void updateNetworkRequestLog(final RequestLoggerData data) {
         dashboardData.setNetworkLoggerData(data);
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                for (MagicBox.OnDashboardDataListener holdListener : dashboardDataListeners) {
-                    holdListener.onPerformance(dashboardData.getPerformanceData());
-                }
-            }
-        });
 
         postToMainThread(new Runnable() {
             @Override
             public void run() {
                 for (MagicBox.OnDashboardDataListener holdListener : dashboardDataListeners) {
-                    holdListener.onHttpRequestLog(dashboardData.getNetworkLoggerData());
+                    holdListener.onHttpRequestLog(data);
                 }
             }
         });
