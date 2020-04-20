@@ -85,7 +85,7 @@ public class PerformanceChartView extends View {
      * @param memUsage mem
      */
     public void updateMemUsage(float memUsage) {
-        float totalMem = MBPlatformUtil.getAppTotalMem();
+        float totalMem = MBPlatformUtil.getAppTotalMem() * 3 / 2;
         if (totalMem == 0) {
             return;
         }
@@ -128,9 +128,9 @@ public class PerformanceChartView extends View {
             // x轴数据 根据position 和每隔大小进行计算
             float pointX = i * width / maxPointSize;
             if (i == 0) {
-                linePath.moveTo(pointX, point.y);
+                linePath.moveTo(pointX, parseOverrideY(point.y));
             } else {
-                linePath.lineTo(pointX, point.y);
+                linePath.lineTo(pointX, parseOverrideY(point.y));
             }
         }
         canvas.drawPath(linePath, linePaint);
@@ -147,6 +147,22 @@ public class PerformanceChartView extends View {
         linePaint.setAntiAlias(true);
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setColor(Color.BLACK);
+    }
+
+    /**
+     * 处理越界的Y值
+     *
+     * @param y 原Y
+     * @return 处理后的Y
+     */
+    private int parseOverrideY(int y) {
+        if (y <= 0) {
+            return 0;
+        } else if (y >= height) {
+            return height;
+        }
+
+        return y;
     }
 
 }
