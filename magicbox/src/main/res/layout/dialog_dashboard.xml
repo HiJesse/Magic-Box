@@ -48,7 +48,9 @@
 
             <TextView
                 android:id="@+id/tv_current_cpu"
-                style="@style/dashboardPerformanceValueText" />
+                style="@style/dashboardPerformanceValueText"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
         </LinearLayout>
 

@@ -1,6 +1,7 @@
 package cn.jesse.magicbox.view;
 
 import android.app.Application;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ScrollView;
@@ -10,6 +11,7 @@ import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
+import cn.jesse.magicbox.util.MBPlatformUtil;
 
 public class DashboardView implements MagicBox.OnDashboardDataListener {
     private View dashboardRootView;
@@ -64,7 +66,9 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         if (performanceData.isCpuMonitorEnable()) {
             cpuRootView.setVisibility(View.VISIBLE);
             cpuCurrentUsageView.setText(String.format("%.2f%%", performanceData.getCurrentCPUUsage()));
+            cpuChartView.setVisibility(View.VISIBLE);
             cpuChartView.updateCPUUsage(performanceData.getCurrentCPUUsage());
+            parseReleaseCPUIssue(performanceData);
         } else {
             cpuRootView.setVisibility(View.GONE);
         }
@@ -84,6 +88,26 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         } else {
             fpsRootView.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 兼容部分机型 release包 cpu 不能获取的问题
+     *
+     * @param performanceData 性能数据
+     */
+    private void parseReleaseCPUIssue(PerformanceData performanceData) {
+        // cpu关闭 或者值为非0 不处理
+        if (!performanceData.isCpuMonitorEnable() || performanceData.getCurrentCPUUsage() != 0) {
+            return;
+        }
+
+        // debug 或 sdk小于0 不处理
+        if (MBPlatformUtil.isDebug(MagicBox.getApplication()) || Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        cpuCurrentUsageView.setText(String.format("当前%s只有debug包能获取CPU信息", MBPlatformUtil.getBrand()));
+        cpuChartView.setVisibility(View.GONE);
     }
 
     @Override

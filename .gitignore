@@ -1,6 +1,5 @@
 #Android 
 *.apk
-*.jks
 /local.properties
 /captures
 /build

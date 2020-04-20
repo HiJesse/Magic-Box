@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
@@ -119,7 +118,7 @@ public class PerformanceCPUJob extends BaseJob {
                     return Float.parseFloat(cpu) / Runtime.getRuntime().availableProcessors();
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             MBLog.e(TAG, "getCPURateAfterO " + e.getMessage());
         } finally {
             if (process != null) {
