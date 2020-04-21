@@ -1,18 +1,15 @@
 apply plugin: 'com.android.library'
+//apply from: '../deploy.gradle'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
+    compileSdkVersion rootProject.ext.build['compileSdkVersion']
+    buildToolsVersion rootProject.ext.build['buildToolsVersion']
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        minSdkVersion rootProject.ext.build['minSdkVersion']
+        targetSdkVersion rootProject.ext.build['targetSdkVersion']
+        versionCode rootProject.ext.build['versionCode']
+        versionName rootProject.ext.build['versionName']
     }
 
     buildTypes {
@@ -27,7 +24,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly rootProject.ext.dep['appcompat']
 
-    compileOnly 'com.squareup.okhttp3:okhttp:3.12.1'
+    compileOnly rootProject.ext.dep['okhttp']
 }
