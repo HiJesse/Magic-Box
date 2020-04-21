@@ -27,8 +27,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * sample页
+ *
+ * @author jesse
+ */
 public class MainActivity extends AppCompatActivity implements MagicBox.OnDashboardDataListener {
-    private final static String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +41,14 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
         setContentView(R.layout.activity_main);
         OkHttpClient okHttpClient = ignoreSSL(new OkHttpClient.Builder()).build();
 
-        // -- 初始化
-        MagicBox.init(getApplication());
+        // --- 初始化
+        MagicBox.init(getApplication(), true);
+        // --- 开启性能监控
         MagicBox.getPerformanceManager().startMonitorFPS();
         MagicBox.getPerformanceManager().startMonitorCPU();
         MagicBox.getPerformanceManager().startMonitorMem();
 
+        // --- 开启网络相关
         okHttpClient = MagicBox.getNetworkInfoManager().setSimulationEnable(true, okHttpClient);
 //        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_TIMEOUT);
 //        MagicBox.getNetworkInfoManager().setSimulationTimeout(5000);
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
         okHttpClient = MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true, okHttpClient);
         MagicBox.getNetworkInfoManager().setRequestLoggerHostWhiteList(new String[]{"www.github.com"});
 
+        // --- 注册数据回调, 并打开仪表盘
         MagicBox.registerDashboardData(this);
         MagicBox.getDashboard().showDashboard();
 

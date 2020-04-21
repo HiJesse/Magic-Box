@@ -13,6 +13,7 @@ import cn.jesse.magicbox.manager.DashboardDataManager;
 import cn.jesse.magicbox.manager.DashboardViewManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.manager.PerformanceInfoManager;
+import cn.jesse.magicbox.util.MBLog;
 
 /**
  * magic box 主入口
@@ -34,6 +35,17 @@ public class MagicBox {
     public static void init(@NonNull Application app) {
         application = app;
         DashboardViewManager.getInstance().init(app);
+    }
+
+    /**
+     * 初始化Magic Box
+     *
+     * @param app       application
+     * @param enableLog 是否开启日志
+     */
+    public static void init(@NonNull Application app, boolean enableLog) {
+        init(app);
+        MBLog.setEnable(enableLog);
     }
 
     public static @Nullable

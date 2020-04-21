@@ -19,6 +19,7 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
     private View cpuRootView;
     private TextView cpuCurrentUsageView;
     private PerformanceChartView cpuChartView;
+    private float maxCPUUsage = 0;
 
     private View memRootView;
     private TextView memCurrentUsageView;
@@ -96,6 +97,15 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
      * @param performanceData 性能数据
      */
     private void parseReleaseCPUIssue(PerformanceData performanceData) {
+        if (performanceData.getCurrentCPUUsage() > maxCPUUsage) {
+            maxCPUUsage = performanceData.getCurrentCPUUsage();
+        }
+
+        // 如果历史cpu使用率大于0 则直接忽略
+        if (maxCPUUsage > 0) {
+            return;
+        }
+
         // cpu关闭 或者值为非0 不处理
         if (!performanceData.isCpuMonitorEnable() || performanceData.getCurrentCPUUsage() != 0) {
             return;
@@ -106,7 +116,7 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
             return;
         }
 
-        cpuCurrentUsageView.setText(String.format("当前%s只有debug包能获取CPU信息", MBPlatformUtil.getBrand()));
+        cpuCurrentUsageView.setText(String.format("%s手机上请尝试使用debug包获取CPU信息", MBPlatformUtil.getBrand()));
         cpuChartView.setVisibility(View.GONE);
     }
 
