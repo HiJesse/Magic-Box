@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- activity magic box -->
+
+    <style name="activityMagicBoxItemTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/activity_item_title_sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="activityMagicBoxItemSubTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/activity_item_content_sp</item>
+    </style>
+
+    <style name="activityMagicBoxPerformanceItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/activity_item_content_sp</item>
+    </style>
+
+    <!-- dashboard -->
+
     <style name="dashboardPerformanceItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

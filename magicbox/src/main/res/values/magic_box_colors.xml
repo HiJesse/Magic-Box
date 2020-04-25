@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="white">#ffffffff</color>
+    <color name="black">#000000</color>
+
+    <!-- dashboard -->
+
     <color name="dashboard_bg">#1a000000</color>
 
     <color name="dashboard_performance_title">#4A4A4A</color>

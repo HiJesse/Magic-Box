@@ -21,6 +21,7 @@ import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.util.MBLog;
+import cn.jesse.magicbox.view.activity.MagicBoxActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
                 MBLog.d(TAG, "onResponse " + response.code());
             }
         });
+
+        MagicBoxActivity.start(this);
     }
 
     @Override
