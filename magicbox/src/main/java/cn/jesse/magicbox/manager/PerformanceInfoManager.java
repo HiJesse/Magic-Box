@@ -73,6 +73,15 @@ public class PerformanceInfoManager {
     }
 
     /**
+     * 是否正在监控fps
+     *
+     * @return bool
+     */
+    public boolean isMonitoringFPS() {
+        return fpsJob != null && fpsJob.isMonitorRunning();
+    }
+
+    /**
      * 开始监控cpu
      */
     public void startMonitorCPU() {
@@ -95,6 +104,15 @@ public class PerformanceInfoManager {
     }
 
     /**
+     * 是否正在监控cpu
+     *
+     * @return bool
+     */
+    public boolean isMonitoringCPU() {
+        return cpuJob != null && cpuJob.isMonitorRunning();
+    }
+
+    /**
      * 开始监控mem
      */
     public void startMonitorMem() {
@@ -114,5 +132,14 @@ public class PerformanceInfoManager {
         }
 
         memJob.stopMonitor();
+    }
+
+    /**
+     * 是否正在监控mem
+     *
+     * @return bool
+     */
+    public boolean isMonitoringMem() {
+        return memJob != null && memJob.isMonitorRunning();
     }
 }

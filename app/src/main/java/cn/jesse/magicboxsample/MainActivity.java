@@ -2,6 +2,7 @@ package cn.jesse.magicboxsample;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import javax.net.ssl.X509TrustManager;
 import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
+import cn.jesse.magicbox.network.okhttp.interceptor.RequestLoggerInterceptor;
+import cn.jesse.magicbox.network.okhttp.interceptor.SimulateNetworkInterceptor;
 import cn.jesse.magicbox.util.MBLog;
 import cn.jesse.magicbox.view.activity.MagicBoxActivity;
 import okhttp3.Call;
@@ -33,38 +36,56 @@ import okhttp3.Response;
  *
  * @author jesse
  */
-public class MainActivity extends AppCompatActivity implements MagicBox.OnDashboardDataListener {
+public class MainActivity extends AppCompatActivity implements MagicBox.OnDashboardDataListener, View.OnClickListener {
     private static final String TAG = "MainActivity";
+    private OkHttpClient okHttpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        OkHttpClient okHttpClient = ignoreSSL(new OkHttpClient.Builder()).build();
+        okHttpClient = ignoreSSL(new OkHttpClient.Builder()).build();
+
+        findViewById(R.id.tv_magicbox).setOnClickListener(this);
+        findViewById(R.id.tv_request).setOnClickListener(this);
 
         // --- 初始化
         MagicBox.init(getApplication(), true);
-        // --- 开启性能监控
-        MagicBox.getPerformanceManager().startMonitorFPS();
-        MagicBox.getPerformanceManager().startMonitorCPU();
-        MagicBox.getPerformanceManager().startMonitorMem();
-
-        // --- 开启网络相关
-        okHttpClient = MagicBox.getNetworkInfoManager().setSimulationEnable(true, okHttpClient);
-//        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_TIMEOUT);
-//        MagicBox.getNetworkInfoManager().setSimulationTimeout(5000);
-
-//        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_BLOCK);
-
-//        MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_SPEED_LIMIT);
-//        MagicBox.getNetworkInfoManager().setSimulationRequestSpeed(100);
-
-        okHttpClient = MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true, okHttpClient);
-        MagicBox.getNetworkInfoManager().setRequestLoggerHostWhiteList(new String[]{"www.github.com"});
+        okHttpClient = okHttpClient
+                .newBuilder()
+                .addNetworkInterceptor(new SimulateNetworkInterceptor())
+                .addInterceptor(new RequestLoggerInterceptor())
+                .build();
 
         // --- 注册数据回调, 并打开仪表盘
         MagicBox.registerDashboardData(this);
         MagicBox.getDashboard().showDashboard();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        MagicBox.unregisterDashboardData(this);
+        MagicBox.getDashboard().dismissDashboard();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPerformance(PerformanceData performanceData) {
+        Log.d(TAG, performanceData.toString());
+    }
+
+    @Override
+    public void onHttpRequestLog(RequestLoggerData loggerData) {
+        Log.d(TAG, loggerData.toString());
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.tv_magicbox) {
+            MagicBoxActivity.start(this);
+            return;
+        }
 
         final Request request = new Request.Builder()
                 .url("http://www.baidu.com/s?wd=android+developer")
@@ -82,30 +103,14 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
                 MBLog.d(TAG, "onResponse " + response.code());
             }
         });
-
-        MagicBoxActivity.start(this);
     }
 
-    @Override
-    protected void onDestroy() {
-        MagicBox.getPerformanceManager().stopMonitorFPS();
-        MagicBox.getPerformanceManager().stopMonitorCPU();
-        MagicBox.getPerformanceManager().stopMonitorMem();
-        MagicBox.unregisterDashboardData(this);
-        MagicBox.getDashboard().dismissDashboard();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onPerformance(PerformanceData performanceData) {
-        Log.d(TAG, performanceData.toString());
-    }
-
-    @Override
-    public void onHttpRequestLog(RequestLoggerData loggerData) {
-        Log.d(TAG, loggerData.toString());
-    }
-
+    /**
+     * 测试代码 忽略证书
+     *
+     * @param builder http builder
+     * @return builder
+     */
     private OkHttpClient.Builder ignoreSSL(@NonNull OkHttpClient.Builder builder) {
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");

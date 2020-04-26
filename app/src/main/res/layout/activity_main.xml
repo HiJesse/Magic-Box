@@ -7,9 +7,30 @@
     android:gravity="center"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_magicbox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFF"
+            android:gravity="center"
+            android:text="打开魔盒" />
+
+        <TextView
+            android:id="@+id/tv_request"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="#00FFFF"
+            android:gravity="center"
+            android:text="请求百度" />
+
+    </LinearLayout>
 
 </LinearLayout>
