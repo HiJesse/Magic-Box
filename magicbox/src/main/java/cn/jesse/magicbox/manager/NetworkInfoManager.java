@@ -1,5 +1,6 @@
 package cn.jesse.magicbox.manager;
 
+import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.network.okhttp.interceptor.RequestLoggerInterceptor;
 import cn.jesse.magicbox.network.okhttp.interceptor.SimulateNetworkInterceptor;
 import cn.jesse.magicbox.util.MBLog;
@@ -18,7 +19,7 @@ public class NetworkInfoManager {
     public static final int SIMULATION_TYPE_SPEED_LIMIT = 300;
 
     private static final int SIMULATION_DEFAULT_REQUEST_SPEED = 1;
-    private static final int SIMULATION_DEFAULT_TIMEOUT_MILLIS = 2000;
+    private static final int SIMULATION_DEFAULT_TIMEOUT_MILLIS = 5000;
 
     private static NetworkInfoManager instance;
     // ----- 模拟网络
@@ -156,6 +157,9 @@ public class NetworkInfoManager {
      */
     public void setRequestLoggerEnable(boolean requestLoggerEnable) {
         this.requestLoggerEnable = requestLoggerEnable;
+        if (!requestLoggerEnable) {
+            DashboardDataManager.getInstance().updateNetworkRequestLog(new RequestLoggerData(false));
+        }
     }
 
     /**

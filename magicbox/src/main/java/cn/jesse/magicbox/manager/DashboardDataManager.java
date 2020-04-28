@@ -10,6 +10,7 @@ import java.util.List;
 
 import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.data.DashboardData;
+import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.util.MBLog;
 
@@ -20,12 +21,13 @@ import cn.jesse.magicbox.util.MBLog;
  */
 public class DashboardDataManager {
     private static final String TAG = "DashboardDataManager";
-    private static final long DURATION_UPDATE_PERFORMANCE = 500;
+    private static final long DURATION_UPDATE_PERFORMANCE = 700;
 
     private static DashboardDataManager instance;
 
     private Handler handler;
     private DashboardData dashboardData;
+    private PerformanceData performanceDataClone;
     private List<MagicBox.OnDashboardDataListener> dashboardDataListeners = new ArrayList<>();
 
     private long performanceUpdateTime;
@@ -132,13 +134,14 @@ public class DashboardDataManager {
     }
 
     /**
-     * 以DURATION_UPDATE_PERFORMANCE为最大频率更新性能数据
+     * 以DURATION_UPDATE_PERFORMANCE为最大频率更新性能数据, 如果有性能开关信息更新 则直接刷新
      */
     private void updatePerformance() {
-        if (System.currentTimeMillis() - performanceUpdateTime < DURATION_UPDATE_PERFORMANCE) {
+        if (System.currentTimeMillis() - performanceUpdateTime < DURATION_UPDATE_PERFORMANCE && !isPerformanceOptionChanged()) {
             return;
         }
         performanceUpdateTime = System.currentTimeMillis();
+        performanceDataClone = new PerformanceData(dashboardData.getPerformanceData());
 
         postToMainThread(new Runnable() {
             @Override
@@ -148,6 +151,23 @@ public class DashboardDataManager {
                 }
             }
         });
+    }
+
+    /**
+     * 判断当次更新 是否有性能开关信息变更
+     *
+     * @return bool
+     */
+    private boolean isPerformanceOptionChanged() {
+        if (performanceDataClone == null) {
+            return true;
+        }
+
+        PerformanceData originPerformanceData = dashboardData.getPerformanceData();
+
+        return performanceDataClone.isCpuMonitorEnable() != originPerformanceData.isCpuMonitorEnable() ||
+                performanceDataClone.isMemMonitorEnable() != originPerformanceData.isMemMonitorEnable() ||
+                performanceDataClone.isFpsMonitorEnable() != originPerformanceData.isFpsMonitorEnable();
     }
 
     private void postToMainThread(@NonNull Runnable runnable) {

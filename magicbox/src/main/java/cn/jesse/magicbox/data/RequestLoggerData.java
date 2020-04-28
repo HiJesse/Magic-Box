@@ -17,6 +17,14 @@ public class RequestLoggerData implements Serializable {
     // 请求耗时 ms
     private long duration;
 
+    public RequestLoggerData() {
+        // ignore
+    }
+
+    public RequestLoggerData(boolean enable) {
+        this.enable = enable;
+    }
+
     public boolean isEnable() {
         return enable;
     }

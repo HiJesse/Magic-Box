@@ -15,6 +15,23 @@ public class PerformanceData implements Serializable {
     private boolean fpsMonitorEnable = false;
     private int currentFPS;
 
+    public PerformanceData() {
+        // ignore
+    }
+
+    public PerformanceData(PerformanceData performanceData) {
+        if (performanceData == null) {
+            return;
+        }
+
+        cpuMonitorEnable = performanceData.cpuMonitorEnable;
+        currentCPUUsage = performanceData.currentCPUUsage;
+        memMonitorEnable = performanceData.memMonitorEnable;
+        currentMemUsage = performanceData.currentMemUsage;
+        fpsMonitorEnable = performanceData.fpsMonitorEnable;
+        currentFPS = performanceData.currentFPS;
+    }
+
     /**
      * 当前是否监听cpu
      *
