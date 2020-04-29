@@ -31,9 +31,10 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
     private CheckBox memCheckBox;
     private CheckBox fpsCheckBox;
 
-    private RadioButton blockRadioButton;
-    private RadioButton timeoutRadioButton;
-    private RadioButton weekRadioButton;
+    private RadioButton blockNetRadioButton;
+    private RadioButton timeoutNetRadioButton;
+    private RadioButton weekNetRadioButton;
+    private RadioButton closeNetSimulationRadioButton;
     private CheckBox netLogCheckBox;
 
     public static void start(Context context) {
@@ -70,14 +71,16 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         memCheckBox.setOnCheckedChangeListener(this);
         fpsCheckBox.setOnCheckedChangeListener(this);
 
-        blockRadioButton = findViewById(R.id.rb_block);
-        timeoutRadioButton = findViewById(R.id.rb_timeout);
-        weekRadioButton = findViewById(R.id.rb_week);
+        closeNetSimulationRadioButton = findViewById(R.id.rb_net_simulation_close);
+        blockNetRadioButton = findViewById(R.id.rb_net_simulation_block);
+        timeoutNetRadioButton = findViewById(R.id.rb_net_simulation_timeout);
+        weekNetRadioButton = findViewById(R.id.rb_net_simulation_week);
         netLogCheckBox = findViewById(R.id.cb_net_log);
 
-        blockRadioButton.setOnCheckedChangeListener(this);
-        timeoutRadioButton.setOnCheckedChangeListener(this);
-        weekRadioButton.setOnCheckedChangeListener(this);
+        closeNetSimulationRadioButton.setOnCheckedChangeListener(this);
+        blockNetRadioButton.setOnCheckedChangeListener(this);
+        timeoutNetRadioButton.setOnCheckedChangeListener(this);
+        weekNetRadioButton.setOnCheckedChangeListener(this);
         netLogCheckBox.setOnCheckedChangeListener(this);
     }
 
@@ -89,18 +92,19 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         netLogCheckBox.setChecked(MagicBox.getNetworkInfoManager().isRequestLoggerEnable());
 
         if (!MagicBox.getNetworkInfoManager().isSimulationEnable()) {
+            closeNetSimulationRadioButton.setChecked(true);
             return;
         }
 
         switch (MagicBox.getNetworkInfoManager().getSimulationType()) {
             case NetworkInfoManager.SIMULATION_TYPE_BLOCK:
-                blockRadioButton.setChecked(true);
+                blockNetRadioButton.setChecked(true);
                 break;
             case NetworkInfoManager.SIMULATION_TYPE_TIMEOUT:
-                timeoutRadioButton.setChecked(true);
+                timeoutNetRadioButton.setChecked(true);
                 break;
             case NetworkInfoManager.SIMULATION_TYPE_SPEED_LIMIT:
-                weekRadioButton.setChecked(true);
+                weekNetRadioButton.setChecked(true);
                 break;
             default:
                 // ignore
@@ -120,12 +124,14 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
             checkPerformanceMem(checked);
         } else if (i == R.id.cb_fps) {
             checkPerformanceFps(checked);
-        } else if (i == R.id.rb_block) {
+        } else if (i == R.id.rb_net_simulation_block) {
             checkNetworkBlock(checked);
-        } else if (i == R.id.rb_timeout) {
+        } else if (i == R.id.rb_net_simulation_timeout) {
             checkNetworkTimeout(checked);
-        } else if (i == R.id.rb_week) {
+        } else if (i == R.id.rb_net_simulation_week) {
             checkNetworkWeek(checked);
+        } else if (i == R.id.rb_net_simulation_close) {
+            MagicBox.getNetworkInfoManager().setSimulationEnable(false);
         } else if (i == R.id.cb_net_log) {
             MagicBox.getNetworkInfoManager().setRequestLoggerEnable(checked);
             MagicBox.getNetworkInfoManager().setRequestLoggerHostWhiteList(new String[]{"www.github.com"});

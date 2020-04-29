@@ -99,7 +99,7 @@
 
                     <TextView
                         style="@style/activityMagicBoxItemSubTitle"
-                        android:text="模拟网络: " />
+                        android:text="模拟: " />
 
                     <RadioGroup
                         android:layout_width="match_parent"
@@ -107,21 +107,28 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/rb_block"
+                            android:id="@+id/rb_net_simulation_close"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="关闭" />
+
+                        <RadioButton
+                            android:id="@+id/rb_net_simulation_block"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="404" />
 
                         <RadioButton
-                            android:id="@+id/rb_timeout"
+                            android:id="@+id/rb_net_simulation_timeout"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="超时" />
 
                         <RadioButton
-                            android:id="@+id/rb_week"
+                            android:id="@+id/rb_net_simulation_week"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
