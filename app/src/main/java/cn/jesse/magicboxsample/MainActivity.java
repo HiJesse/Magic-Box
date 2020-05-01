@@ -59,14 +59,12 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
 
         // --- 注册数据回调, 并打开仪表盘
         MagicBox.registerDashboardData(this);
-        MagicBox.getDashboard().showDashboard();
 
     }
 
     @Override
     protected void onDestroy() {
         MagicBox.unregisterDashboardData(this);
-        MagicBox.getDashboard().dismissDashboard();
         super.onDestroy();
     }
 

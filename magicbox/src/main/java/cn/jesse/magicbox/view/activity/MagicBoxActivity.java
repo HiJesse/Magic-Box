@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.R;
+import cn.jesse.magicbox.data.MagicBoxToolData;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
+import cn.jesse.magicbox.view.adapter.MagicBoxToolsAdapter;
 
 /**
  * magic box主页面
@@ -26,6 +28,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
 
     private TextView titleText;
     private GridView toolsGridView;
+    private MagicBoxToolsAdapter toolsAdapter;
 
     private CheckBox cpuCheckBox;
     private CheckBox memCheckBox;
@@ -85,6 +88,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
     }
 
     private void initData() {
+        initToolsData();
         cpuCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringCPU());
         memCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringMem());
         fpsCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringFPS());
@@ -109,6 +113,35 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
             default:
                 // ignore
         }
+    }
+
+    private void initToolsData() {
+        toolsAdapter = new MagicBoxToolsAdapter(this);
+        toolsGridView.setAdapter(toolsAdapter);
+        toolsAdapter.addData(new MagicBoxToolData("App信息", new MagicBoxToolsAdapter.OnToolClickListener() {
+            @Override
+            public void onToolClick(int index, String toolName) {
+                //TODO app信息
+            }
+        }));
+
+        toolsAdapter.addData(new MagicBoxToolData("设备信息", new MagicBoxToolsAdapter.OnToolClickListener() {
+            @Override
+            public void onToolClick(int index, String toolName) {
+                //TODO 设备信息
+            }
+        }));
+
+        toolsAdapter.addData(new MagicBoxToolData("开关仪表盘", new MagicBoxToolsAdapter.OnToolClickListener() {
+            @Override
+            public void onToolClick(int index, String toolName) {
+                if (MagicBox.getDashboard().isShowing()) {
+                    MagicBox.getDashboard().dismissDashboard();
+                } else {
+                    MagicBox.getDashboard().showDashboard();
+                }
+            }
+        }));
     }
 
     @Override
