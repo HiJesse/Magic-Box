@@ -121,7 +121,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         toolsAdapter.addData(new MagicBoxToolData("App信息", new MagicBoxToolsAdapter.OnToolClickListener() {
             @Override
             public void onToolClick(int index, String toolName) {
-                //TODO app信息
+                MagicBoxAppInfoActivity.start(MagicBoxActivity.this);
             }
         }));
 

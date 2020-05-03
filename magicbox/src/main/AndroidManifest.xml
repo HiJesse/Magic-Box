@@ -11,6 +11,8 @@
         <activity android:name=".view.activity.MagicBoxActivity" />
 
         <activity android:name=".view.activity.MagicBoxDeviceInfoActivity" />
+
+        <activity android:name=".view.activity.MagicBoxAppInfoActivity" />
     </application>
 
 </manifest>
