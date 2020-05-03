@@ -4,6 +4,7 @@
     <color name="white">#ffffffff</color>
     <color name="black">#000000</color>
     <color name="green">#00FFFF</color>
+    <color name="grey">#4A4A4A</color>
 
     <!-- dashboard -->
 

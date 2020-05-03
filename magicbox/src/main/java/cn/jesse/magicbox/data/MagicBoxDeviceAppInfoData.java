@@ -9,6 +9,14 @@ public class MagicBoxDeviceAppInfoData {
     private String name;
     private String value;
 
+    public MagicBoxDeviceAppInfoData() {
+    }
+
+    public MagicBoxDeviceAppInfoData(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public String getName() {
         return name;
     }

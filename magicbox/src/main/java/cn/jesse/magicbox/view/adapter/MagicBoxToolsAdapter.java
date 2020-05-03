@@ -45,7 +45,6 @@ public class MagicBoxToolsAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        //将布局文件转化为View对象
         View view = mInflater.inflate(R.layout.activity_magic_box_tools_item, null);
 
         View rootView = view.findViewById(R.id.ll_root);
