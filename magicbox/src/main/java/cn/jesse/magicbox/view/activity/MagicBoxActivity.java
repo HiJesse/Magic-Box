@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.R;
@@ -25,6 +28,10 @@ import cn.jesse.magicbox.view.adapter.MagicBoxToolsAdapter;
  */
 public class MagicBoxActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "MagicBoxActivity";
+    private static final String PARAMS_TITLE = "PARAMS_TITLE";
+    private static final String PARAMS_EXTERNAL_TOOLS = "PARAMS_EXTERNAL_TOOLS";
+    // result code 基数
+    public static final int BASE_RESULT_CODE = 100;
 
     private TextView titleText;
     private GridView toolsGridView;
@@ -40,10 +47,48 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
     private RadioButton closeNetSimulationRadioButton;
     private CheckBox netLogCheckBox;
 
-    public static void start(Context context) {
+    public static void start(@NonNull Context context) {
+        start(context, "");
+    }
+
+    /**
+     * 启动默认魔盒主页
+     *
+     * @param context context
+     * @param title   标题
+     */
+    public static void start(@NonNull Context context, String title) {
         Intent intent = new Intent(context, MagicBoxActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (!TextUtils.isEmpty(title)) {
+            intent.putExtra(PARAMS_TITLE, title);
+        }
         context.startActivity(intent);
+    }
+
+    public static void startActivityWithResult(@NonNull Activity context, int requestCode, @NonNull String[] tools) {
+        startActivityWithResult(context, "", requestCode, tools);
+    }
+
+    /**
+     * 启动魔盒主页, 支持小工具扩展, 并监听回调
+     * <p>
+     * 回调以{@link #BASE_RESULT_CODE} 为基数
+     * 加上tools数组下标为result code, 进行回调
+     *
+     * @param context     context
+     * @param title       标题
+     * @param requestCode 请求code
+     * @param tools       扩展小工具
+     */
+    public static void startActivityWithResult(@NonNull Activity context, String title, int requestCode, @NonNull String[] tools) {
+        Intent intent = new Intent(context, MagicBoxActivity.class);
+        intent.putExtra(PARAMS_EXTERNAL_TOOLS, tools);
+        if (!TextUtils.isEmpty(title)) {
+            intent.putExtra(PARAMS_TITLE, title);
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -88,6 +133,11 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
     }
 
     private void initData() {
+        String title = getIntent().getStringExtra(PARAMS_TITLE);
+        if (!TextUtils.isEmpty(title)) {
+            titleText.setText(title);
+        }
+
         initToolsData();
         cpuCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringCPU());
         memCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringMem());
@@ -142,6 +192,23 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
                 }
             }
         }));
+
+        // 添加外部扩展小工具
+        String[] externalTools = getIntent().getStringArrayExtra(PARAMS_EXTERNAL_TOOLS);
+        if (externalTools == null || externalTools.length == 0) {
+            return;
+        }
+
+        for (int i = 0; i < externalTools.length; i++) {
+            final int finalI = i;
+            toolsAdapter.addData(new MagicBoxToolData(externalTools[i], new MagicBoxToolsAdapter.OnToolClickListener() {
+                @Override
+                public void onToolClick(int index, String toolName) {
+                    setResult(BASE_RESULT_CODE + finalI);
+                    finish();
+                }
+            }));
+        }
     }
 
     @Override

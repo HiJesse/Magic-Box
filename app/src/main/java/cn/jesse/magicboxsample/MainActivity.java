@@ -1,10 +1,13 @@
 package cn.jesse.magicboxsample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -41,6 +44,7 @@ import okhttp3.Response;
  */
 public class MainActivity extends AppCompatActivity implements MagicBox.OnDashboardDataListener, View.OnClickListener {
     private static final String TAG = "MainActivity";
+    private static final int REQUEST_MAGIC_BOX = 2;
     private OkHttpClient okHttpClient;
 
     @Override
@@ -89,7 +93,10 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_magicbox) {
-            MagicBoxActivity.start(this);
+            MagicBoxActivity.startActivityWithResult(this,
+                    "修改标题",
+                    REQUEST_MAGIC_BOX,
+                    new String[]{"扩展1", "扩展2"});
             return;
         }
 
@@ -147,5 +154,25 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
             Log.e(TAG, "error to set self HTTPS verify", ex);
         }
         return builder;
+    }
+
+    private void toast(@NonNull String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode != REQUEST_MAGIC_BOX) {
+            return;
+        }
+
+        // 以BASE_RESULT_CODE 基数 + 扩展下标
+        if (resultCode == MagicBoxActivity.BASE_RESULT_CODE) {
+            toast("扩展1");
+        } else if (resultCode == MagicBoxActivity.BASE_RESULT_CODE + 1) {
+            toast("扩展2");
+        }
     }
 }
