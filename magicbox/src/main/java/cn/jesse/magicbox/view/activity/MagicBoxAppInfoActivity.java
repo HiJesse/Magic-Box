@@ -17,7 +17,6 @@ import java.util.List;
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.data.MagicBoxDeviceAppInfoData;
 import cn.jesse.magicbox.util.MBAppUtil;
-import cn.jesse.magicbox.util.MBPlatformUtil;
 import cn.jesse.magicbox.view.adapter.MagicBoxDeviceAppInfoAdapter;
 
 /**
@@ -28,6 +27,17 @@ import cn.jesse.magicbox.view.adapter.MagicBoxDeviceAppInfoAdapter;
 public class MagicBoxAppInfoActivity extends Activity {
     private ListView listView;
     private ImageView appIconImage;
+
+    private static List<MagicBoxDeviceAppInfoData> externalData;
+
+    /**
+     * 设置外部扩展数据
+     *
+     * @param externalData data
+     */
+    public static void setExternalData(List<MagicBoxDeviceAppInfoData> externalData) {
+        MagicBoxAppInfoActivity.externalData = externalData;
+    }
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MagicBoxAppInfoActivity.class);
@@ -72,6 +82,11 @@ public class MagicBoxAppInfoActivity extends Activity {
         list.add(new MagicBoxDeviceAppInfoData("版本号", MBAppUtil.getVersionName(this)));
         list.add(new MagicBoxDeviceAppInfoData("版本码", String.valueOf(MBAppUtil.getVersionCode(this))));
         list.add(new MagicBoxDeviceAppInfoData("包名", MBAppUtil.getPackageName(this)));
+
+        if (externalData != null && !externalData.isEmpty()) {
+            list.add(new MagicBoxDeviceAppInfoData("", ""));
+            list.addAll(externalData);
+        }
 
         adapter.addData(list);
     }

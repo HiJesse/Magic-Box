@@ -7,6 +7,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
+import cn.jesse.magicbox.data.MagicBoxDeviceAppInfoData;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.manager.DashboardDataManager;
@@ -14,6 +17,7 @@ import cn.jesse.magicbox.manager.DashboardViewManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.manager.PerformanceInfoManager;
 import cn.jesse.magicbox.util.MBLog;
+import cn.jesse.magicbox.view.activity.MagicBoxAppInfoActivity;
 
 /**
  * magic box 主入口
@@ -101,6 +105,15 @@ public class MagicBox {
      */
     public static DashboardViewManager getDashboard() {
         return DashboardViewManager.getInstance();
+    }
+
+    /**
+     * 设置外部数据, 展示在app信息页面
+     *
+     * @param externalData data
+     */
+    public static void setAppInfoExternalData(List<MagicBoxDeviceAppInfoData> externalData) {
+        MagicBoxAppInfoActivity.setExternalData(externalData);
     }
 
     /**

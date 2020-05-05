@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -19,6 +21,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.data.MagicBoxDeviceAppInfoData;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.network.okhttp.interceptor.RequestLoggerInterceptor;
@@ -59,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
 
         // --- 注册数据回调, 并打开仪表盘
         MagicBox.registerDashboardData(this);
+
+        // --- 设置扩展app信息
+        List<MagicBoxDeviceAppInfoData> appData = new ArrayList<>();
+        appData.add(new MagicBoxDeviceAppInfoData("渠道", "demo"));
+        MagicBox.setAppInfoExternalData(appData);
 
     }
 
