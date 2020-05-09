@@ -55,9 +55,11 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
 
         findViewById(R.id.tv_magicbox).setOnClickListener(this);
         findViewById(R.id.tv_request).setOnClickListener(this);
+        findViewById(R.id.tv_crash).setOnClickListener(this);
 
         // --- 初始化
         MagicBox.init(getApplication(), true);
+        MagicBox.getJavaUncaughtCrashManager().enable(getApplication());
         okHttpClient = okHttpClient
                 .newBuilder()
                 .addNetworkInterceptor(new SimulateNetworkInterceptor())
@@ -97,6 +99,12 @@ public class MainActivity extends AppCompatActivity implements MagicBox.OnDashbo
                     "修改标题",
                     REQUEST_MAGIC_BOX,
                     new String[]{"扩展1", "扩展2"});
+            return;
+        }
+
+        if (v.getId() == R.id.tv_crash) {
+            int i = 5;
+            i /= 0;
             return;
         }
 

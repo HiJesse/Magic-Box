@@ -14,6 +14,7 @@ import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.manager.DashboardDataManager;
 import cn.jesse.magicbox.manager.DashboardViewManager;
+import cn.jesse.magicbox.manager.JavaUncaughtCrashManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.manager.PerformanceInfoManager;
 import cn.jesse.magicbox.util.MBLog;
@@ -78,6 +79,15 @@ public class MagicBox {
      */
     public static NetworkInfoManager getNetworkInfoManager() {
         return NetworkInfoManager.getInstance();
+    }
+
+    /**
+     * 获取java层 处理异常管理器
+     *
+     * @return JavaUncaughtCrashManager
+     */
+    public static JavaUncaughtCrashManager getJavaUncaughtCrashManager() {
+        return JavaUncaughtCrashManager.getInstance();
     }
 
     /**
