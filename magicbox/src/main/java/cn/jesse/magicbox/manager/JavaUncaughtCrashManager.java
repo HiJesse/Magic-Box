@@ -5,6 +5,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import cn.jesse.magicbox.util.CrashUtil;
 import cn.jesse.magicbox.util.MBLog;
 
 /**
@@ -54,7 +55,7 @@ public class JavaUncaughtCrashManager implements Thread.UncaughtExceptionHandler
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         try {
-
+            CrashUtil.saveJavaCrashInfo(application, e);
         } catch (Exception additionalEx) {
             // 保险起见 catch下
             MBLog.e(TAG, additionalEx.getMessage());
