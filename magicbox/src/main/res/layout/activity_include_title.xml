@@ -10,7 +10,7 @@
         android:layout_height="40dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:src="@mipmap/icon_common_back" />
+        android:src="@mipmap/activity_title_back" />
 
     <TextView
         android:id="@+id/tv_title"

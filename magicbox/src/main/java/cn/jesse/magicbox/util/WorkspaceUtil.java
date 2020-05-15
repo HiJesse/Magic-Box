@@ -35,6 +35,16 @@ public class WorkspaceUtil {
     }
 
     /**
+     * 获取沙盒文件夹
+     *
+     * @param application app
+     * @return sandbox
+     */
+    public static File getSandboxDir(@NonNull Application application) {
+        return application.getFilesDir().getAbsoluteFile();
+    }
+
+    /**
      * 获取内部 crash工作路径
      *
      * @param application app

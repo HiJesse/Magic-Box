@@ -3,9 +3,9 @@
     package="cn.jesse.magicbox">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
         <activity android:name=".view.activity.MagicBoxActivity" />
@@ -13,6 +13,8 @@
         <activity android:name=".view.activity.MagicBoxDeviceInfoActivity" />
 
         <activity android:name=".view.activity.MagicBoxAppInfoActivity" />
+
+        <activity android:name=".view.activity.MagicBoxFileExplorerActivity" />
     </application>
 
 </manifest>

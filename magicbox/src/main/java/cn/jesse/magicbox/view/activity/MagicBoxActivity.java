@@ -193,6 +193,13 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
             }
         }));
 
+        toolsAdapter.addData(new MagicBoxToolData("Crash查看", new MagicBoxToolsAdapter.OnToolClickListener() {
+            @Override
+            public void onToolClick(int index, String toolName) {
+                MagicBoxFileExplorerActivity.start(MagicBoxActivity.this);
+            }
+        }));
+
         // 添加外部扩展小工具
         String[] externalTools = getIntent().getStringArrayExtra(PARAMS_EXTERNAL_TOOLS);
         if (externalTools == null || externalTools.length == 0) {
