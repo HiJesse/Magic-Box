@@ -31,7 +31,8 @@
         android:drawableLeft="@mipmap/activity_file_explorer_back_parent"
         android:drawablePadding="5dp"
         android:padding="5dp"
-        android:text="点击返回上一级目录" />
+        android:text="点击返回上一级目录"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

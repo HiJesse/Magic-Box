@@ -41,7 +41,7 @@ public class WorkspaceUtil {
      * @return sandbox
      */
     public static File getSandboxDir(@NonNull Application application) {
-        return application.getFilesDir().getAbsoluteFile();
+        return application.getFilesDir().getParentFile();
     }
 
     /**
@@ -53,5 +53,19 @@ public class WorkspaceUtil {
     public static File getInternalCrashDir(@NonNull Application application) {
         initWorkspace(application);
         return new File(application.getCacheDir(), PATH_TOMBSTONE);
+    }
+
+    /**
+     * 确定入参是是有效文件夹
+     *
+     * @param file 文件夹
+     * @return bool
+     */
+    public static boolean isDirValid(@NonNull File file) {
+        try {
+            return file.exists() && file.isDirectory();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
