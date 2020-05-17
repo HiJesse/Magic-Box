@@ -21,7 +21,7 @@
                 style="@style/activityMagicBoxItemTitle"
                 android:text="小工具" />
 
-            <GridView
+            <cn.jesse.magicbox.view.ScrollInsideGridView
                 android:id="@+id/gv_tools"
                 style="@style/activityMagicBoxToolsGrid" />
 

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -19,6 +18,8 @@ import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.data.MagicBoxToolData;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
+import cn.jesse.magicbox.util.WorkspaceUtil;
+import cn.jesse.magicbox.view.ScrollInsideGridView;
 import cn.jesse.magicbox.view.adapter.MagicBoxToolsAdapter;
 
 /**
@@ -34,7 +35,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
     public static final int BASE_RESULT_CODE = 100;
 
     private TextView titleText;
-    private GridView toolsGridView;
+    private ScrollInsideGridView toolsGridView;
     private MagicBoxToolsAdapter toolsAdapter;
 
     private CheckBox cpuCheckBox;
@@ -165,6 +166,9 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         }
     }
 
+    /**
+     * 初始化默认小工具 和扩展小工具
+     */
     private void initToolsData() {
         toolsAdapter = new MagicBoxToolsAdapter(this);
         toolsGridView.setAdapter(toolsAdapter);
@@ -194,6 +198,13 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         }));
 
         toolsAdapter.addData(new MagicBoxToolData("Crash查看", new MagicBoxToolsAdapter.OnToolClickListener() {
+            @Override
+            public void onToolClick(int index, String toolName) {
+                MagicBoxFileExplorerActivity.start(MagicBoxActivity.this, WorkspaceUtil.getInternalCrashDir(getApplication()).getPath());
+            }
+        }));
+
+        toolsAdapter.addData(new MagicBoxToolData("沙盒查看", new MagicBoxToolsAdapter.OnToolClickListener() {
             @Override
             public void onToolClick(int index, String toolName) {
                 MagicBoxFileExplorerActivity.start(MagicBoxActivity.this);
