@@ -13,31 +13,20 @@
         android:padding="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/activityFileExplorerCurrentPath"
             android:text="当前路径: " />
 
         <TextView
             android:id="@+id/tv_current_path"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/activityFileExplorerCurrentPath" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_back_to_parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/activity_file_explorer_back_parent"
-        android:drawablePadding="5dp"
-        android:padding="5dp"
-        android:text="点击返回上一级目录"
-        android:visibility="gone" />
+        style="@style/activityFileExplorerBackToParentDir" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#eeeeee" />
+    <View style="@style/commonHorizontalDivider" />
 
     <ListView
         android:id="@+id/lv_files"

@@ -10,6 +10,7 @@
         android:layout_height="40dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:background="@color/white"
         android:src="@mipmap/activity_title_back" />
 
     <TextView
@@ -23,9 +24,7 @@
         android:textColor="@color/black" />
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_alignParentBottom="true"
-        android:background="#eeeeee" />
+        style="@style/commonHorizontalDivider"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
