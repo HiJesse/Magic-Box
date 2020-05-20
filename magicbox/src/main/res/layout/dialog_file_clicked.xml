@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:background="@drawable/shape_dialog_common_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_text"
+        style="@style/commonDialogItemText"
+        android:text="以文本打开" />
+
+    <TextView
+        android:id="@+id/tv_export"
+        style="@style/commonDialogItemText"
+        android:text="导出到SD卡Download下" />
+
+    <TextView style="@style/commonHorizontalDivider" />
+
+    <TextView
+        android:id="@+id/tv_dismiss"
+        style="@style/commonDialogItemText"
+        android:text="取消" />
+
+
+</LinearLayout>

@@ -17,6 +17,7 @@ import java.io.File;
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.util.MBPlatformUtil;
 import cn.jesse.magicbox.util.WorkspaceUtil;
+import cn.jesse.magicbox.view.adapter.FileClickedDialog;
 import cn.jesse.magicbox.view.adapter.MagicBoxFileExplorerAdapter;
 
 /**
@@ -33,6 +34,8 @@ public class MagicBoxFileExplorerActivity extends Activity implements View.OnCli
     private File rootDir;
     private File currentDir;
     private MagicBoxFileExplorerAdapter fileExplorerAdapter;
+
+    private FileClickedDialog fileClickedDialog;
 
     /**
      * 打开默认沙盒空间的文件浏览器
@@ -111,14 +114,23 @@ public class MagicBoxFileExplorerActivity extends Activity implements View.OnCli
 
     @Override
     public void onFileExplorerItemClick(int position, File current) {
-        currentDir = current;
-        if (rootDir == null || currentDir == null) {
+        if (rootDir == null || current == null) {
             backToParentText.setVisibility(View.GONE);
             return;
         }
 
-        backToParentText.setVisibility(View.VISIBLE);
-        currentPathText.setText(current.getPath());
+        if (current.isDirectory()) {
+            currentDir = current;
+            backToParentText.setVisibility(View.VISIBLE);
+            currentPathText.setText(current.getPath());
+            return;
+        }
+
+        if (fileClickedDialog == null) {
+            fileClickedDialog = new FileClickedDialog(this);
+        }
+
+        fileClickedDialog.show(current);
     }
 
     /**

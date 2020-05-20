@@ -75,6 +75,10 @@ public class MagicBoxFileExplorerAdapter extends BaseAdapter {
                     return;
                 }
 
+                if (onItemClickListener != null) {
+                    onItemClickListener.onFileExplorerItemClick(position, file);
+                }
+
 
             }
         });
