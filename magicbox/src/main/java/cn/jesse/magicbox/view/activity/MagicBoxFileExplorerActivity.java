@@ -17,7 +17,7 @@ import java.io.File;
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.util.MBPlatformUtil;
 import cn.jesse.magicbox.util.WorkspaceUtil;
-import cn.jesse.magicbox.view.adapter.FileClickedDialog;
+import cn.jesse.magicbox.view.dialog.FileClickedDialog;
 import cn.jesse.magicbox.view.adapter.MagicBoxFileExplorerAdapter;
 
 /**

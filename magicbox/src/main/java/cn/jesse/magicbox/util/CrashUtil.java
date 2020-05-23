@@ -49,9 +49,7 @@ public class CrashUtil {
         } catch (Exception ex) {
             MBLog.e(TAG, "saveJavaCrashInfo " + ex.getMessage());
         } finally {
-            if (pw != null) {
-                pw.close();
-            }
+            FileUtil.close(pw);
         }
     }
 

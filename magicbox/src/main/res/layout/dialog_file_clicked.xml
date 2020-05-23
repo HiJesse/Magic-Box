@@ -14,7 +14,7 @@
     <TextView
         android:id="@+id/tv_export"
         style="@style/commonDialogItemText"
-        android:text="导出到SD卡Download下" />
+        android:text="导出到SD卡" />
 
     <TextView style="@style/commonHorizontalDivider" />
 

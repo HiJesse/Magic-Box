@@ -1,6 +1,7 @@
 package cn.jesse.magicbox.util;
 
 import android.app.Application;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
@@ -53,6 +54,20 @@ public class WorkspaceUtil {
     public static File getInternalCrashDir(@NonNull Application application) {
         initWorkspace(application);
         return new File(application.getCacheDir(), PATH_TOMBSTONE);
+    }
+
+    /**
+     * 获取外部 缓存空间
+     *
+     * @param application app
+     * @return dir
+     */
+    public static File getExternalCacheDir(@NonNull Application application) {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return null;
+        }
+
+        return application.getExternalCacheDir();
     }
 
     /**
