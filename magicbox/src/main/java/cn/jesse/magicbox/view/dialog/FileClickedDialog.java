@@ -16,6 +16,7 @@ import cn.jesse.magicbox.util.FileUtil;
 import cn.jesse.magicbox.util.MBPlatformUtil;
 import cn.jesse.magicbox.util.PermissionUtil;
 import cn.jesse.magicbox.util.WorkspaceUtil;
+import cn.jesse.magicbox.view.activity.MagicBoxFileContentActivity;
 
 /**
  * 文件浏览器 点击文件弹窗
@@ -81,7 +82,7 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
         } else if (v.getId() == R.id.tv_export) {
             exportFile();
         } else if (v.getId() == R.id.tv_text) {
-
+            MagicBoxFileContentActivity.start(activity, clickedFile == null ? null : clickedFile.getAbsolutePath());
         }
     }
 

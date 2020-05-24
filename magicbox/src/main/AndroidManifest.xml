@@ -17,6 +17,8 @@
         <activity android:name=".view.activity.MagicBoxAppInfoActivity" />
 
         <activity android:name=".view.activity.MagicBoxFileExplorerActivity" />
+
+        <activity android:name=".view.activity.MagicBoxFileContentActivity" />
     </application>
 
 </manifest>

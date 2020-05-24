@@ -83,4 +83,18 @@ public class WorkspaceUtil {
             return false;
         }
     }
+
+    /**
+     * 确定入参是是有效文件
+     *
+     * @param file 文件
+     * @return bool
+     */
+    public static boolean isFileValid(@NonNull File file) {
+        try {
+            return file.exists() && file.isFile();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
