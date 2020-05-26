@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import java.io.File;
 
 import cn.jesse.magicbox.R;
+import cn.jesse.magicbox.util.FileUtil;
 import cn.jesse.magicbox.util.MBPlatformUtil;
 import cn.jesse.magicbox.util.WorkspaceUtil;
 
@@ -90,31 +93,51 @@ public class MagicBoxFileContentActivity extends Activity {
         String filePath = getIntent().getStringExtra(PARAMS_PATH);
 
         if (TextUtils.isEmpty(filePath)) {
-            MBPlatformUtil.toast("入参文件为空");
-            finish();
+            finishAfterToast("入参文件为空");
             return;
         }
 
         if (!WorkspaceUtil.isFileValid(new File(filePath))) {
-            MBPlatformUtil.toast("文件无效");
-            finish();
+            finishAfterToast("文件无效");
             return;
         }
 
         int fileType = getIntent().getIntExtra(PARAMS_FILE_TYPE, 0);
-        if (fileType < TYPE_TEXT || fileType > TYPE_IMAGE) {
-
+        if ((fileType < TYPE_TEXT || fileType > TYPE_IMAGE) && !FileUtil.isImageFile(filePath) && !FileUtil.isTextFile(filePath)) {
+            finishAfterToast("暂不支持该格式文件展示");
+            return;
         }
 
-        textContentView.setText("");
+        if (FileUtil.isTextFile(filePath) || fileType == TYPE_TEXT) {
+            showTextContent(filePath);
+            return;
+        }
+
+        if (FileUtil.isImageFile(filePath) || fileType == TYPE_IMAGE) {
+            showImageContent(filePath);
+        }
     }
 
-    private void showTextContent(String content) {
+    private void finishAfterToast(@NonNull String msg) {
+        MBPlatformUtil.toast(msg);
+        finish();
+    }
+
+    private void showTextContent(@NonNull String filePath) {
         textContentView.setVisibility(View.VISIBLE);
-        textContentView.setText(content);
     }
 
-    private void showImageContent() {
+    private void showImageContent(@NonNull String filePath) {
         imageContentView.setVisibility(View.VISIBLE);
+        try {
+            Bitmap bit = BitmapFactory.decodeFile(filePath);
+            if (bit == null) {
+                finishAfterToast("解析图片失败");
+                return;
+            }
+            imageContentView.setImageBitmap(bit);
+        } catch (Exception e) {
+            finishAfterToast("解析图片失败");
+        }
     }
 }

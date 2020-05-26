@@ -12,6 +12,11 @@
         android:text="以文本打开" />
 
     <TextView
+        android:id="@+id/tv_image"
+        style="@style/commonDialogItemText"
+        android:text="以图片打开" />
+
+    <TextView
         android:id="@+id/tv_export"
         style="@style/commonDialogItemText"
         android:text="导出到SD卡" />

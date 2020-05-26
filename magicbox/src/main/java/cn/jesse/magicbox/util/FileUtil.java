@@ -1,5 +1,7 @@
 package cn.jesse.magicbox.util;
 
+import android.text.TextUtils;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,5 +72,56 @@ public class FileUtil {
         } catch (IOException e) {
             MBLog.e(TAG, "close " + e.getMessage());
         }
+    }
+
+    /**
+     * 获取文件后缀
+     *
+     * @param fileName 文件名
+     * @return suffix
+     */
+    public static String getFileSuffix(String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            return null;
+        }
+
+
+        if (fileName.length() > 0) {
+            int dot = fileName.lastIndexOf('.');
+            if ((dot > -1) && (dot < (fileName.length() - 1))) {
+                return fileName.substring(dot + 1);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 传入文件是否为文本文件
+     *
+     * @param fileName file name
+     * @return bool
+     */
+    public static boolean isTextFile(String fileName) {
+        String suffix = getFileSuffix(fileName);
+        if (TextUtils.isEmpty(suffix)) {
+            return false;
+        }
+        return "txt".equals(suffix.toLowerCase());
+    }
+
+    /**
+     * 传入文件是否为图片文件
+     *
+     * @param fileName file name
+     * @return bool
+     */
+    public static boolean isImageFile(String fileName) {
+        String suffix = getFileSuffix(fileName);
+        if (TextUtils.isEmpty(suffix)) {
+            return false;
+        }
+
+        suffix = suffix.toLowerCase();
+        return "jpg".equals(suffix) || "gif".equals(suffix) || "png".equals(suffix) || "jpeg".equals(suffix) || "bmp".equals(suffix);
     }
 }

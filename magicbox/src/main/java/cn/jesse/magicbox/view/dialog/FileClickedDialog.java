@@ -25,7 +25,6 @@ import cn.jesse.magicbox.view.activity.MagicBoxFileContentActivity;
  */
 public class FileClickedDialog extends Dialog implements View.OnClickListener {
     private Activity activity;
-    private View openTextView;
     private File clickedFile;
 
     public FileClickedDialog(@NonNull Activity context) {
@@ -47,9 +46,8 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
     }
 
     private void initView() {
-        openTextView = findViewById(R.id.tv_text);
-
-        openTextView.setOnClickListener(this);
+        findViewById(R.id.tv_text).setOnClickListener(this);
+        findViewById(R.id.tv_image).setOnClickListener(this);
 
         findViewById(R.id.tv_export).setOnClickListener(this);
         findViewById(R.id.tv_dismiss).setOnClickListener(this);
@@ -82,7 +80,9 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
         } else if (v.getId() == R.id.tv_export) {
             exportFile();
         } else if (v.getId() == R.id.tv_text) {
-            MagicBoxFileContentActivity.start(activity, clickedFile == null ? null : clickedFile.getAbsolutePath());
+            MagicBoxFileContentActivity.start(activity, MagicBoxFileContentActivity.TYPE_TEXT, clickedFile == null ? null : clickedFile.getAbsolutePath());
+        } else if (v.getId() == R.id.tv_image) {
+            MagicBoxFileContentActivity.start(activity, MagicBoxFileContentActivity.TYPE_IMAGE, clickedFile == null ? null : clickedFile.getAbsolutePath());
         }
     }
 
@@ -108,7 +108,7 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
         if (FileUtil.copyFile(clickedFile, new File(external, clickedFile.getName()))) {
             MBPlatformUtil.toast(String.format("文件已导出至SD卡%s", external.getPath()));
         } else {
-            MBPlatformUtil.toast("文件已导出失败");
+            MBPlatformUtil.toast("文件导出失败");
         }
 
         dismiss();
