@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
@@ -27,6 +28,12 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/activity_file_content_loading" />
 
     </LinearLayout>
 

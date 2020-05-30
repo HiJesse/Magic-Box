@@ -7,6 +7,9 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -30,6 +33,7 @@ import cn.jesse.magicbox.util.WorkspaceUtil;
  * @author jesse
  */
 public class MagicBoxFileContentActivity extends Activity {
+    private static final String TAG = "MagicBoxFileContentActivity";
     private static final String PARAMS_PATH = "PARAMS_PATH";
     private static final String PARAMS_FILE_TYPE = "PARAMS_FILE_TYPE";
     public static final int TYPE_TEXT = 1;
@@ -37,6 +41,10 @@ public class MagicBoxFileContentActivity extends Activity {
 
     private TextView textContentView;
     private ImageView imageContentView;
+    private View loadingView;
+
+    private Handler handler;
+    private Handler mainHandler;
 
     /**
      * 打开指定文件 进行预览
@@ -83,6 +91,7 @@ public class MagicBoxFileContentActivity extends Activity {
             }
         });
 
+        loadingView = findViewById(R.id.iv_loading);
         textContentView = findViewById(R.id.tv_content);
         textContentView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -108,6 +117,11 @@ public class MagicBoxFileContentActivity extends Activity {
             return;
         }
 
+        HandlerThread handlerThread = new HandlerThread(TAG);
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+        mainHandler = new Handler(Looper.getMainLooper());
+
         if (FileUtil.isTextFile(filePath) || fileType == TYPE_TEXT) {
             showTextContent(filePath);
             return;
@@ -118,16 +132,54 @@ public class MagicBoxFileContentActivity extends Activity {
         }
     }
 
-    private void finishAfterToast(@NonNull String msg) {
-        MBPlatformUtil.toast(msg);
-        finish();
+    /**
+     * 解析并显示文本数据
+     *
+     * @param filePath 文件路径
+     **/
+    private void showTextContent(@NonNull final String filePath) {
+        loadingView.setVisibility(View.VISIBLE);
+        textContentView.setVisibility(View.GONE);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                parseTextFile(filePath);
+            }
+        });
     }
 
-    private void showTextContent(@NonNull String filePath) {
-        textContentView.setVisibility(View.VISIBLE);
+    /**
+     * 子线程读写文件, 并在主线程中展示结果
+     *
+     * @param filePath 文件路径
+     */
+    private void parseTextFile(@NonNull String filePath) {
+        final String content;
+
+        try {
+            content = FileUtil.getTextFileContent(filePath);
+        } catch (Exception e) {
+            finishAfterToast("读取文件失败");
+            return;
+        }
+
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingView.setVisibility(View.GONE);
+                textContentView.setVisibility(View.VISIBLE);
+                textContentView.setText(content);
+            }
+        });
     }
 
+    /**
+     * 解析并显示图片数据
+     *
+     * @param filePath 文件路径
+     */
     private void showImageContent(@NonNull String filePath) {
+        loadingView.setVisibility(View.GONE);
         imageContentView.setVisibility(View.VISIBLE);
         try {
             Bitmap bit = BitmapFactory.decodeFile(filePath);
@@ -139,5 +191,15 @@ public class MagicBoxFileContentActivity extends Activity {
         } catch (Exception e) {
             finishAfterToast("解析图片失败");
         }
+    }
+
+    /**
+     * toast 后关闭页面
+     *
+     * @param msg toast
+     */
+    private void finishAfterToast(@NonNull String msg) {
+        MBPlatformUtil.toast(msg);
+        finish();
     }
 }

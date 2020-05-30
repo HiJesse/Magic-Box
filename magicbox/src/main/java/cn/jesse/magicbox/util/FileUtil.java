@@ -2,12 +2,14 @@ package cn.jesse.magicbox.util;
 
 import android.text.TextUtils;
 
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 /**
@@ -55,6 +57,49 @@ public class FileUtil {
             close(inputStream);
         }
         return status;
+    }
+
+    /**
+     * 读取文本文件内容
+     *
+     * @param srcFile 文件路径
+     * @return content
+     */
+    public static String getTextFileContent(String srcFile) throws Exception {
+        File file = new File(srcFile);
+
+        StringBuilder content = new StringBuilder();
+        if (!file.exists() || file.isDirectory()) {
+            throw new Exception("file is invalid | is directory");
+        }
+
+        Exception exception = null;
+
+        InputStream inputStream = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedReader bufferedReader = null;
+        try {
+            inputStream = new FileInputStream(file);
+            inputStreamReader = new InputStreamReader(inputStream);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line);
+                content.append("\n");
+            }
+        } catch (Exception e) {
+            exception = e;
+        } finally {
+            close(bufferedReader);
+            close(inputStreamReader);
+            close(inputStream);
+        }
+
+        if (exception != null) {
+            throw exception;
+        }
+
+        return content.toString();
     }
 
     /**
