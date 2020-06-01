@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.io.File;
+
 import cn.jesse.magicbox.MagicBox;
 
 /**
@@ -69,6 +71,31 @@ public class MBPlatformUtil {
     }
 
     // ----- 基本设备信息
+
+    /**
+     * 是否root
+     *
+     * @return bool
+     */
+    public static boolean isRooted() {
+        String path = System.getenv("PATH");
+
+        if (TextUtils.isEmpty(path)) {
+            return false;
+        }
+
+        String[] paths = path.split(":");
+
+        for (String tmpPath : paths) {
+            File file = new File(tmpPath + (tmpPath.endsWith("/") ? "su" : "/su"));
+
+            if (file.exists() && !file.isDirectory() && file.canExecute()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * 获取品牌

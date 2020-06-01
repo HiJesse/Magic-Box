@@ -82,6 +82,10 @@ public class CrashUtil {
         sb.append(MBPlatformUtil.getABI());
         sb.append("\n");
 
+        sb.append("ROOT: ");
+        sb.append(MBPlatformUtil.isRooted() ? "Y" : "N");
+        sb.append("\n");
+
         sb.append("Screen: ");
         int[] displayMetrics = MBPlatformUtil.getDisplayMetrics(application);
         sb.append(displayMetrics[0]).append("*").append(displayMetrics[1]);

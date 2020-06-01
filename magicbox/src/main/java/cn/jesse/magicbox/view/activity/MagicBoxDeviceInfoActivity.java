@@ -63,6 +63,7 @@ public class MagicBoxDeviceInfoActivity extends Activity {
         list.add(new MagicBoxDeviceAppInfoData("型号", MBPlatformUtil.getModel()));
         list.add(new MagicBoxDeviceAppInfoData("系统版本", MBPlatformUtil.getOSVersion()));
         list.add(new MagicBoxDeviceAppInfoData("指令集", MBPlatformUtil.getABI()));
+        list.add(new MagicBoxDeviceAppInfoData("root", MBPlatformUtil.isRooted() ? "已root" : "未root"));
         int[] displayMetrics = MBPlatformUtil.getDisplayMetrics(this);
         list.add(new MagicBoxDeviceAppInfoData("分辨率", displayMetrics[0] + "*" + displayMetrics[1]));
 
