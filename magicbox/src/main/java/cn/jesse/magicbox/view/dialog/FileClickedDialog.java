@@ -96,7 +96,7 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
 
         if (!PermissionUtil.checkStoragePermission(activity)) {
             MBPlatformUtil.toast("请授予存储权限");
-            PermissionUtil.requestStoragePermisson(activity, 0);
+            PermissionUtil.requestStoragePermission(activity, 0);
             return;
         }
 

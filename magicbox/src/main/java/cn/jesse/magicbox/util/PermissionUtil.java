@@ -3,9 +3,9 @@ package cn.jesse.magicbox.util;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
 /**
  * 权限管理
@@ -25,7 +25,10 @@ public class PermissionUtil {
      * @return bool
      */
     public static boolean checkStoragePermission(@NonNull Activity context) {
-        int permission = ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permission = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            permission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
         return permission == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -35,7 +38,9 @@ public class PermissionUtil {
      * @param context     context
      * @param requestCode 回调code
      */
-    public static void requestStoragePermisson(@NonNull Activity context, int requestCode) {
-        ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+    public static void requestStoragePermission(@NonNull Activity context, int requestCode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+        }
     }
 }
