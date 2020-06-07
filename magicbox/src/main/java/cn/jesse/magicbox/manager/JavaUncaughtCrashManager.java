@@ -11,7 +11,7 @@ import cn.jesse.magicbox.util.MBLog;
 /**
  * java 异常处理
  * <p>
- * 未捕获的异常写入到 /data/data/package_name/xxx下
+ * 未捕获的异常写入到 /data/data/package_name/cache/magic_box/tombstone下
  * <p>
  * 文件格式 java_date_time.so
  * eg. java_20200501_121122.so

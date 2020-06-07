@@ -47,7 +47,6 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
 
     private void initView() {
         findViewById(R.id.tv_text).setOnClickListener(this);
-        findViewById(R.id.tv_image).setOnClickListener(this);
 
         findViewById(R.id.tv_export).setOnClickListener(this);
         findViewById(R.id.tv_dismiss).setOnClickListener(this);
@@ -81,8 +80,6 @@ public class FileClickedDialog extends Dialog implements View.OnClickListener {
             exportFile();
         } else if (v.getId() == R.id.tv_text) {
             MagicBoxFileContentActivity.start(activity, MagicBoxFileContentActivity.TYPE_TEXT, clickedFile == null ? null : clickedFile.getAbsolutePath());
-        } else if (v.getId() == R.id.tv_image) {
-            MagicBoxFileContentActivity.start(activity, MagicBoxFileContentActivity.TYPE_IMAGE, clickedFile == null ? null : clickedFile.getAbsolutePath());
         }
     }
 

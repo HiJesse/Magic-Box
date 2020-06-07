@@ -186,7 +186,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
             }
         }));
 
-        toolsAdapter.addData(new MagicBoxToolData("开关仪表盘", new MagicBoxToolsAdapter.OnToolClickListener() {
+        toolsAdapter.addData(new MagicBoxToolData("仪表盘", new MagicBoxToolsAdapter.OnToolClickListener() {
             @Override
             public void onToolClick(int index, String toolName) {
                 if (MagicBox.getDashboard().isShowing()) {
@@ -197,14 +197,14 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
             }
         }));
 
-        toolsAdapter.addData(new MagicBoxToolData("Crash查看", new MagicBoxToolsAdapter.OnToolClickListener() {
+        toolsAdapter.addData(new MagicBoxToolData("Crash信息", new MagicBoxToolsAdapter.OnToolClickListener() {
             @Override
             public void onToolClick(int index, String toolName) {
                 MagicBoxFileExplorerActivity.start(MagicBoxActivity.this, WorkspaceUtil.getInternalCrashDir(getApplication()).getPath());
             }
         }));
 
-        toolsAdapter.addData(new MagicBoxToolData("沙盒查看", new MagicBoxToolsAdapter.OnToolClickListener() {
+        toolsAdapter.addData(new MagicBoxToolData("沙盒信息", new MagicBoxToolsAdapter.OnToolClickListener() {
             @Override
             public void onToolClick(int index, String toolName) {
                 MagicBoxFileExplorerActivity.start(MagicBoxActivity.this);
