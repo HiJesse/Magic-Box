@@ -1,36 +1,54 @@
 # Magic-Box
 
-MagicBox是一款Android平台的性能检测, 接口请求控制和拦截等工具合集. 建议在Debug和测试阶段使用.
+MagicBox是一款Android平台的小工具合集, 性能检测, 接口请求控制和拦截等功能集合. 建议在Debug和测试阶段使用.
 
 ## 功能清单
 
-|性能|描述|
-|:-:|:-:|
-|CPU|APP的实时CPU使用率|
-|内存|APP的实时内存使用量|
-|帧率|APP的实时渲染帧率|
-|数据可视化|开启系统悬浮窗, 将以上数据可视化|
+* 小工具: 提供各种小工具辅助开发测试, 并支持外部扩展.
 
-|网络(支持3.x okhttp)|描述|
-|:-:|:-:|
-|请求状态模拟|模拟弱网, 超时, 404等接口状态|
-|请求日志|拦截请求, 汇总基本属性和耗时等信息|
+    |功能|描述|
+    |:-:|:-:|
+    |APP信息|打开展示APP详细信息, 支持外部扩展|
+    |设备信息|打开展示设备详细信息|
+    |仪表盘|打开或关闭系统弹窗, 用于实时展示性能和网络数据|
+    |Crash信息|直接在APP内查看Crash信息, 也支持导出到SD卡|
+    |沙盒查看|查看APP沙盒空间, 支持文本预览和导出到SD卡|
+    |...|支持外部动态扩展|
 
-|TODO|描述|
-|:-:|:-:|
-|设备信息展示|展示出详细的设备信息|
-|APP信息展示|展示APP基本信息|
-|crash查询|在app内部直接查看crash信息和导出日志|
-|...|...|
+* 性能监控: 提供开关性能相关数据的监控, 实时性能数据可以展示在仪表盘上或直接回调.
+
+    |功能|描述|
+    |:-:|:-:|
+    |CPU|开关监控APP的实时CPU使用率|
+    |内存|开关监控APP的实时内存使用量|
+    |帧率|开关监控APP的实时渲染帧率|
+
+* 网络辅助(支持3.x okhttp): 支持开关模拟各种网络情况和拦截请求日志.
+
+    |功能|描述|
+    |:-:|:-:|
+    |弱网模拟|接口请求的速度默认限制在1kb/s, 可以外部配置|
+    |超时模拟|接口请求默认等待5s后, 返回400. 超时时间可配置|
+    |404模拟|接口直接返回404|
+    |拦截日志|拦截请求, 汇总基本属性和耗时等信息|
+
+* TODO
+
+    |TODO|描述|
+    |:-:|:-:|
+    |组件加载耗时监控|插桩监控页面, 服务等组件的加载耗时|
+    |...|...|
 
 ### 额外开销
 
 |额外开销|描述|
 |:-:|:-:|
-|常驻线程1个|开启监控后, 用来获取解析性能数据|
-|网络拦截器2个|开启监控后, 用来模拟和拦截接口请求|
+|线程1个|开启性能监控后, 启动线程处理数据|
+|线程1个|预览沙盒文件时IO文件|
+|网络拦截器2个|开启网络功能后, 用来模拟和拦截接口请求|
 |系统弹窗权限|需要申请系统弹窗权限, 来进行数据可视化|
-|包体积|增大20k左右|
+|存储权限|导出沙盒或Crash文件到SD卡时申请|
+|包体积|增大40k左右|
 
 ## Gradle接入
 
@@ -49,7 +67,7 @@ Module`build.gradle`中接入Magic-Box.
 
 ```
 dependencies {
-    compile 'com.github.hijesse:magic-box:0.5.1'
+    compile 'com.github.hijesse:magic-box:1.0.0'
 }
 ```
 
@@ -57,118 +75,177 @@ dependencies {
 
 * 初始化
 
-    建议在Application中初始化MagicBox. SDK的初始化并没有做任何耗时操作, 只是全局缓存一下应用的context并标记是否要打印内部log.
-
-    ```
-    MagicBox.init(getApplication(), true);
-    ```
-
-* 开启和关闭性能监控
-
-    ```
-    // 开启性能监控
-    MagicBox.getPerformanceManager().startMonitorCPU();
-    MagicBox.getPerformanceManager().startMonitorMem();
-    MagicBox.getPerformanceManager().startMonitorFPS();
-    ```
-
-    ```
-    // 关闭性能监控
-    MagicBox.getPerformanceManager().stopMonitorCPU();
-    MagicBox.getPerformanceManager().stopMonitorMem();
-    MagicBox.getPerformanceManager().stopMonitorFPS();
-    ```
-
-* 网络相关
-
-    SDK提供两种方式开启网络相关总开关: 
-
-    使用SDK传入OKHttpClient并打开总开关.
-    ```
-    okHttpClient = MagicBox.getNetworkInfoManager().setSimulationEnable(true, okHttpClient);
-    ```
-
-    或者手动添加网络拦截器, 再通过设置打开开关.
-
-    ```
-    builder.addNetworkInterceptor(new SimulateNetworkInterceptor())
-
-    MagicBox.getNetworkInfoManager().setSimulationEnable(true)
-    ```
-
-    1. 模拟5000ms超时
+    1. 初始化Magic-Box. 建议在Application中初始化MagicBox. SDK的初始化并没有做任何耗时操作, 只是全局缓存一下应用的context并标记是否要打印内部log.
 
         ```
+        MagicBox.init(getApplication(), true);
+        ```
+
+    2. 初始化网络拦截器
+
+        SDK提供两种方式添加拦截器并开启网络相关总开关: 
+
+        使用SDK传入OKHttpClient自动添加拦截器并打开总开关.
+        ```
+        // 分别添加网络模拟拦截器和请求日志拦截器
+        okHttpClient = MagicBox.getNetworkInfoManager().setSimulationEnable(true, okHttpClient);
+        okHttpClient = MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true, okHttpClient);
+        ```
+
+        或者使用OKHttp的builder手动添加网络拦截器.
+
+        ```
+        // 分别添加网络模拟和请求日志拦截器
+        builder.addNetworkInterceptor(new SimulateNetworkInterceptor())
+        builder.addInterceptor(new RequestLoggerInterceptor())
+        ```
+
+    3. 扩展APP信息展示
+
+        ```
+        List<MagicBoxDeviceAppInfoData> appData = new ArrayList<>();
+        appData.add(new MagicBoxDeviceAppInfoData("渠道", "demo"));
+        // 设置app信息的扩展数据
+        MagicBox.setAppInfoExternalData(appData);
+        ```
+
+* 启动魔盒主页
+
+    1. 启动默认魔盒主页
+
+        ![](./screenshot/main_default.jpg)
+
+        ```
+        /**
+        * 启动默认魔盒主页
+        *
+        * @param context context
+        * @param title   标题
+        */
+        MagicBoxActivity.start(context, title)
+        ```
+
+    2. 启动支持扩展小工具的魔盒主页, 并回调扩欧战小工具的点击事件.
+
+        ![](./screenshot/main_with_extra.jpg)
+
+        ```
+        /**
+        * 启动魔盒主页, 支持小工具扩展, 并监听回调
+        * <p>
+        * 回调以{@link #BASE_RESULT_CODE} 为基数
+        * 加上tools数组下标为result code, 进行回调
+        *
+        * @param context     context
+        * @param title       标题
+        * @param requestCode 请求code
+        * @param tools       扩展小工具
+        */
+        MagicBoxActivity.startActivityWithResult(activity, title,
+                    REQUEST_MAGIC_BOX, new String[]{"扩展1", "扩展2"});
+        ```
+
+        以扩展的方式启动魔盒主页后, 在启动父级页面的`onActivityResult`里处理扩展的点击回调.
+
+        ![](./screenshot/main_with_extra_click_callback.jpg)
+
+        ```
+        if (requestCode != REQUEST_MAGIC_BOX) {
+            return;
+        }
+
+        // 以BASE_RESULT_CODE 基数 + 扩展下标
+        if (resultCode == MagicBoxActivity.BASE_RESULT_CODE) {
+            toast("扩展1");
+        } else if (resultCode == MagicBoxActivity.BASE_RESULT_CODE + 1) {
+            toast("扩展2");
+        }
+        ```
+
+* 独立开关
+
+    1. 开关性能监控, 并监听性能数据回调. 将在仪表盘上展示的数据直接回调本地.
+
+        ![](./screenshot/dashboard.jpg)
+
+        ```
+        // 开启性能监控
+        MagicBox.getPerformanceManager().startMonitorCPU();
+        MagicBox.getPerformanceManager().startMonitorMem();
+        MagicBox.getPerformanceManager().startMonitorFPS();
+        ```
+
+        ```
+        // 关闭性能监控
+        MagicBox.getPerformanceManager().stopMonitorCPU();
+        MagicBox.getPerformanceManager().stopMonitorMem();
+        MagicBox.getPerformanceManager().stopMonitorFPS();
+        ```
+
+        ```
+        // 注册性能数据回调
+        MagicBox.registerDashboardData(listener);
+        // 非使用场景一定要注销, 避免内存泄露
+        MagicBox.unregisterDashboardData(listener);
+
+        /**
+        * Magic Box所有数据监听. UI 线程回调.
+        */
+        public interface OnDashboardDataListener {
+            /**
+            * 性能相关数据回调
+            *
+            * @param performanceData 性能
+            */
+            void onPerformance(PerformanceData performanceData);
+
+            /**
+            * 网络请求拦截日志回调
+            *
+            * @param loggerData 拦截日志
+            */
+            void onHttpRequestLog(RequestLoggerData loggerData);
+        }
+        ```
+
+    2. 开启Crash拦截, 建议在Application中初始化MagicBox后进行设置.
+
+        ```
+        // java crash拦截
+        MagicBox.getJavaUncaughtCrashManager().enable(getApplication());
+        ```
+
+        开启Crash拦截, 在APP中发生Crash后SDK会将Crash信息保存至沙盒缓存文件中. 可以使用小工具直接文本查看或导出到SD卡.
+
+        ![](./screenshot/file_click_dialog.jpg) 
+        
+        ![](./screenshot/file_preview.jpg)
+
+    3. 开关网络模拟
+
+        ```
+        // 开启网络模拟总开关
+        MagicBox.getNetworkInfoManager().setSimulationEnable(true)
+
+        // 设置模拟网络超时, 并设置超时时间为10s
         MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_TIMEOUT);
-        MagicBox.getNetworkInfoManager().setSimulationTimeout(5000);
-        ```
+        MagicBox.getNetworkInfoManager().setSimulationTimeout(10000);
 
-    2. 模拟404
-
-        ```
+        // 模拟404
         MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_BLOCK);
-        ```
 
-    3. 限制请求网速为10k/s
-
-        ```
+        // 设置模拟限速, 并设置限速为10k/s
         MagicBox.getNetworkInfoManager().setSimulationType(NetworkInfoManager.SIMULATION_TYPE_SPEED_LIMIT);
         MagicBox.getNetworkInfoManager().setSimulationRequestSpeed(10);
         ```
 
-    4. 请求日志
+    4. 开关网络拦截
 
         ```
-        // 直接通过SDK和OkHttpClinet开启
-        okHttpClient = MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true, okHttpClient);
-        ...
-        // 或者手动添加应用拦截器, 再通过SDK设置开启
-        build.addInterceptor(new RequestLoggerInterceptor())
+        // 开启网络拦截总开关
         MagicBox.getNetworkInfoManager().setRequestLoggerEnable(true);
-        ```
-
-        设置日志拦截域名白名单
-
-        ```
+        
+        // 设置网络拦截域名白名单
         MagicBox.getNetworkInfoManager().setRequestLoggerHostWhiteList(new String[]{"www.github.com"});
         ```
 
-* 性能, 网络数据回调和可视化
-
-    如果不需要源数据的话, 可以开启上面的功能后通过SDK打开Dashboard系统弹窗直接展示数据. 效果如下图所示: 展示CPU, 内存占率的线图和请求记录.
-
-    ![](./screenshot/dashboard.png)
-
-    ```
-    // 打开Dashboard, 已经校验和申请系统弹窗权限
-    MagicBox.getDashboard().showDashboard();
-    // 关闭Dashboard
-    MagicBox.getDashboard().dismissDashboard();
-    ```
-
-    如果想要接收原始的数据, 则可以通过SDK注册和注销数据回调(所有的回调都为UI线程). `PerformanceData` 是实时性能数据的集合, `RequestLoggerData`是当前网络请求接口信息的实例. 
-
-    ```
-    MagicBox.registerDashboardData(listener);
-    // 非使用场景一定要注销, 避免内存泄露
-    MagicBox.unregisterDashboardData(listener);
-
-    /**
-     * Magic Box所有数据监听. UI 线程回调.
-     */
-    public interface OnDashboardDataListener {
-        /**
-         * 性能相关数据回调
-         *
-         * @param performanceData 性能
-         */
-        void onPerformance(PerformanceData performanceData);
-
-        /**
-         * 网络请求拦截日志回调
-         *
-         * @param loggerData 拦截日志
-         */
-        void onHttpRequestLog(RequestLoggerData loggerData);
-    }
-    ```
