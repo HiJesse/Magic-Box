@@ -58,8 +58,27 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         netLoggerScrollview.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
+    /**
+     * 获取根view
+     *
+     * @return view
+     */
     public View getDashboardRootView() {
         return dashboardRootView;
+    }
+
+    /**
+     * 清除仪表盘数据
+     */
+    public void clearDashboard() {
+        if (dashboardRootView == null) {
+            return;
+        }
+
+        cpuRootView.setVisibility(View.GONE);
+        memRootView.setVisibility(View.GONE);
+        fpsRootView.setVisibility(View.GONE);
+        netLoggerTextView.setText("");
     }
 
     @Override

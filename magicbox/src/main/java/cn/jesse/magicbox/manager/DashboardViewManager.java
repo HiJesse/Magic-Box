@@ -90,6 +90,7 @@ public class DashboardViewManager implements MagicBox.OnDashboardDataListener {
             MBLog.e(TAG, "showDashboard root view init failed");
             return;
         }
+        dashboardView.clearDashboard();
 
         showing = true;
         MagicBox.registerDashboardData(this);
