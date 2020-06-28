@@ -57,6 +57,9 @@ public class DashboardDataManager {
      * @param listener listener
      */
     public synchronized void register(MagicBox.OnDashboardDataListener listener) {
+        if (listener == null) {
+            return;
+        }
         for (MagicBox.OnDashboardDataListener holdListener : dashboardDataListeners) {
             if (holdListener == listener) {
                 return;
@@ -82,7 +85,7 @@ public class DashboardDataManager {
      * @param cpuUsage 使用情况
      */
     public void updateCPUUsage(boolean enable, float cpuUsage) {
-        MBLog.i(TAG, "cpu " + cpuUsage);
+        MBLog.d(TAG, "cpu " + cpuUsage);
         dashboardData.getPerformanceData().setCpuMonitorEnable(enable);
         dashboardData.getPerformanceData().setCurrentCPUUsage(cpuUsage);
         updatePerformance();
@@ -95,7 +98,7 @@ public class DashboardDataManager {
      * @param memUsage 使用情况
      */
     public void updateMemUsage(boolean enable, float memUsage) {
-        MBLog.i(TAG, "mem " + memUsage);
+        MBLog.d(TAG, "mem " + memUsage);
         dashboardData.getPerformanceData().setMemMonitorEnable(enable);
         dashboardData.getPerformanceData().setCurrentMemUsage(memUsage);
         updatePerformance();
@@ -108,7 +111,7 @@ public class DashboardDataManager {
      * @param fps    帧率
      */
     public void updateFPS(boolean enable, int fps) {
-        MBLog.i(TAG, "fps " + fps);
+        MBLog.d(TAG, "fps " + fps);
         dashboardData.getPerformanceData().setFpsMonitorEnable(enable);
         dashboardData.getPerformanceData().setCurrentFPS(fps);
         updatePerformance();
@@ -120,7 +123,7 @@ public class DashboardDataManager {
      * @param data 日志
      */
     public void updateNetworkRequestLog(final RequestLoggerData data) {
-        MBLog.i(TAG, "net log " + data == null ? "" : data.toString());
+        MBLog.d(TAG, "net log " + data == null ? "" : data.toString());
         dashboardData.setNetworkLoggerData(data);
 
         postToMainThread(new Runnable() {
