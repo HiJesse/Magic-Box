@@ -1,5 +1,6 @@
 package cn.jesse.magicboxsample;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -42,7 +42,7 @@ import okhttp3.Response;
  *
  * @author jesse
  */
-public class MainActivity extends AppCompatActivity implements MagicBox.OnDashboardDataListener, View.OnClickListener {
+public class MainActivity extends Activity implements MagicBox.OnDashboardDataListener, View.OnClickListener {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_MAGIC_BOX = 2;
     private OkHttpClient okHttpClient;
