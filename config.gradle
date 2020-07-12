@@ -15,7 +15,7 @@ ext {
             "appcompat"   : 'androidx.appcompat:appcompat:1.2.0-rc01',
             "okhttp"      : 'com.squareup.okhttp3:okhttp:3.12.1',
 
-            "aop-runtime" : 'org.aspectj:aspectjrt:1.9.5',
-            "aop-compiler": 'org.aspectj:aspectjtools:1.9.5',
+            "aop-runtime" : 'org.aspectj:aspectjrt:1.9.0',
+            "aop-compiler": 'org.aspectj:aspectjtools:1.9.0',
     ]
 }
