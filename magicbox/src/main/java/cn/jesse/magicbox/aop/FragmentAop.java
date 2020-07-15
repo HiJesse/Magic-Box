@@ -22,10 +22,11 @@ public class FragmentAop {
      * @throws Throwable e
      */
     @Around("execution(android.view.View android.app.Fragment.onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle))")
-    public void fragmentOnViewCreateTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object fragmentOnViewCreateTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeTime = System.currentTimeMillis();
-        joinPoint.proceed();
+        Object returnData = joinPoint.proceed();
         Log.d(TAG, joinPoint.getThis().hashCode() + ".onCreateView duration: " + (System.currentTimeMillis() - beforeTime));
+        return returnData;
     }
 
     /**
