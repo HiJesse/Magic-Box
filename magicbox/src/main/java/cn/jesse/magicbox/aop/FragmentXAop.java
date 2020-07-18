@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import cn.jesse.magicbox.data.AopTimeCosting;
+import cn.jesse.magicbox.manager.AopManager;
 import cn.jesse.magicbox.manager.DashboardDataManager;
 
 /**
@@ -24,6 +25,9 @@ public class FragmentXAop {
      */
     @Around("execution(android.view.View androidx.fragment.app.Fragment.onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle))")
     public Object fragmentOnViewCreateTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (!AopManager.getInstance().isAopEnable()) {
+            return joinPoint.proceed();
+        }
         long beforeTime = System.currentTimeMillis();
         Object returnData = joinPoint.proceed();
         DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
@@ -43,6 +47,10 @@ public class FragmentXAop {
      */
     @Around("execution(void androidx.fragment.app.Fragment.onViewCreated(android.view.View, android.os.Bundle))")
     public void fragmentOnViewCreatedTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (!AopManager.getInstance().isAopEnable()) {
+            joinPoint.proceed();
+            return;
+        }
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
         DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
@@ -61,6 +69,10 @@ public class FragmentXAop {
      */
     @Around("execution(void androidx.fragment.app.Fragment.onDestroyView())")
     public void fragmentXOnViewDestroyTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (!AopManager.getInstance().isAopEnable()) {
+            joinPoint.proceed();
+            return;
+        }
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
         DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
