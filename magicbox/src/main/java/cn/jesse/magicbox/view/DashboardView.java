@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.R;
+import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.util.MBPlatformUtil;
@@ -154,6 +155,21 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         netLoggerTextView.append(loggerData.getDuration() + "ms");
         netLoggerTextView.append("  PATH: ");
         netLoggerTextView.append(loggerData.getPath());
+        netLoggerTextView.append("\n");
+        netLoggerScrollview.fullScroll(View.FOCUS_DOWN);
+    }
+
+    @Override
+    public void onPageRenderCosting(AopTimeCosting costing) {
+        netLoggerScrollview.setVisibility(View.VISIBLE);
+        netLoggerTextView.append("PAGE HASH: ");
+        netLoggerTextView.append(costing.getObjectHashCode());
+        netLoggerTextView.append(" METHOD: ");
+        netLoggerTextView.append(costing.getMethodName());
+        netLoggerTextView.append("  NAME: ");
+        netLoggerTextView.append(costing.getObjectClassName());
+        netLoggerTextView.append(" COSTING: ");
+        netLoggerTextView.append(costing.getTimeCosting() + "ms");
         netLoggerTextView.append("\n");
         netLoggerScrollview.fullScroll(View.FOCUS_DOWN);
     }

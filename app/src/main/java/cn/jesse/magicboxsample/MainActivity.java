@@ -24,6 +24,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.data.MagicBoxDeviceAppInfoData;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
@@ -90,6 +91,11 @@ public class MainActivity extends Activity implements MagicBox.OnDashboardDataLi
     @Override
     public void onHttpRequestLog(RequestLoggerData loggerData) {
         Log.d(TAG, loggerData.toString());
+    }
+
+    @Override
+    public void onPageRenderCosting(AopTimeCosting costing) {
+        Log.d(TAG, costing.toString());
     }
 
     @Override

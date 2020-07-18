@@ -3,7 +3,7 @@ package cn.jesse.magicbox.data;
 import java.io.Serializable;
 
 /**
- * 所有汇总数据
+ * 汇总数据
  *
  * @author jesse
  */

@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
 import cn.jesse.magicbox.util.MBLog;
@@ -141,6 +142,15 @@ public class DashboardViewManager implements MagicBox.OnDashboardDataListener {
         }
 
         dashboardView.onHttpRequestLog(loggerData);
+    }
+
+    @Override
+    public void onPageRenderCosting(AopTimeCosting costing) {
+        if (costing == null || !isShowing() || dashboardView == null) {
+            return;
+        }
+
+        dashboardView.onPageRenderCosting(costing);
     }
 
     private void initDashboard() {

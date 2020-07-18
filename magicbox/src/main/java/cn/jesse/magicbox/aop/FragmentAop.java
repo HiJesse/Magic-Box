@@ -1,10 +1,11 @@
 package cn.jesse.magicbox.aop;
 
-import android.util.Log;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+
+import cn.jesse.magicbox.data.AopTimeCosting;
+import cn.jesse.magicbox.manager.DashboardDataManager;
 
 /**
  * android.app.fragment aop
@@ -25,7 +26,12 @@ public class FragmentAop {
     public Object fragmentOnViewCreateTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeTime = System.currentTimeMillis();
         Object returnData = joinPoint.proceed();
-        Log.d(TAG, joinPoint.getThis().hashCode() + ".onCreateView duration: " + (System.currentTimeMillis() - beforeTime));
+        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+                String.valueOf(joinPoint.getThis().hashCode()),
+                joinPoint.getTarget().getClass().getSimpleName(),
+                "onCreateView",
+                System.currentTimeMillis() - beforeTime
+        ));
         return returnData;
     }
 
@@ -39,7 +45,12 @@ public class FragmentAop {
     public void fragmentOnViewCreatedTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        Log.d(TAG, joinPoint.getThis().hashCode() + ".onViewCreated duration: " + (System.currentTimeMillis() - beforeTime));
+        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+                String.valueOf(joinPoint.getThis().hashCode()),
+                joinPoint.getTarget().getClass().getSimpleName(),
+                "onViewCreated",
+                System.currentTimeMillis() - beforeTime
+        ));
     }
 
     /**
@@ -52,6 +63,11 @@ public class FragmentAop {
     public void fragmentOnViewDestroyTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        Log.d(TAG, joinPoint.getThis().hashCode() + ".onDestroyView duration: " + (System.currentTimeMillis() - beforeTime));
+        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+                String.valueOf(joinPoint.getThis().hashCode()),
+                joinPoint.getTarget().getClass().getSimpleName(),
+                "onDestroyView",
+                System.currentTimeMillis() - beforeTime
+        ));
     }
 }

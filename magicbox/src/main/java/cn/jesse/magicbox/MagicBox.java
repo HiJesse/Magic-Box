@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.data.MagicBoxDeviceAppInfoData;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
@@ -143,5 +144,12 @@ public class MagicBox {
          * @param loggerData 拦截日志
          */
         void onHttpRequestLog(RequestLoggerData loggerData);
+
+        /**
+         * 页面渲染等耗时回调
+         *
+         * @param costing 耗时信息
+         */
+        void onPageRenderCosting(AopTimeCosting costing);
     }
 }

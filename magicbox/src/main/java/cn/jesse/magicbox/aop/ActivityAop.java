@@ -1,10 +1,11 @@
 package cn.jesse.magicbox.aop;
 
-import android.util.Log;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+
+import cn.jesse.magicbox.data.AopTimeCosting;
+import cn.jesse.magicbox.manager.DashboardDataManager;
 
 /**
  * activity aop
@@ -13,7 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
  */
 @Aspect
 public class ActivityAop {
-    private static final String TAG = ActivityAop.class.getSimpleName();
 
     /**
      * onCreate 切入点
@@ -25,7 +25,12 @@ public class ActivityAop {
     public void activityOnCreateTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        Log.d(TAG, joinPoint.getThis().hashCode() + ".onCreate duration: " + (System.currentTimeMillis() - beforeTime));
+        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+                String.valueOf(joinPoint.getThis().hashCode()),
+                joinPoint.getTarget().getClass().getSimpleName(),
+                "onCreate",
+                System.currentTimeMillis() - beforeTime
+        ));
     }
 
     /**
@@ -38,6 +43,11 @@ public class ActivityAop {
     public void activityOnDestroyTriggered(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        Log.d(TAG, joinPoint.getThis().hashCode() + ".onDestroy duration: " + (System.currentTimeMillis() - beforeTime));
+        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+                String.valueOf(joinPoint.getThis().hashCode()),
+                joinPoint.getTarget().getClass().getSimpleName(),
+                "onDestroy",
+                System.currentTimeMillis() - beforeTime
+        ));
     }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jesse.magicbox.MagicBox;
+import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.data.DashboardData;
 import cn.jesse.magicbox.data.PerformanceData;
 import cn.jesse.magicbox.data.RequestLoggerData;
@@ -131,6 +132,23 @@ public class DashboardDataManager {
             public void run() {
                 for (MagicBox.OnDashboardDataListener holdListener : dashboardDataListeners) {
                     holdListener.onHttpRequestLog(data);
+                }
+            }
+        });
+    }
+
+    /**
+     * 更新页面渲染耗时信息
+     *
+     * @param costing 耗时信息
+     */
+    public void updatePageRenderCosting(final AopTimeCosting costing) {
+        MBLog.d(TAG, "page render costing" + costing == null ? "" : costing.getTimeCosting() + " ms");
+        postToMainThread(new Runnable() {
+            @Override
+            public void run() {
+                for (MagicBox.OnDashboardDataListener holdListener : dashboardDataListeners) {
+                    holdListener.onPageRenderCosting(costing);
                 }
             }
         });
