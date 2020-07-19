@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import cn.jesse.magicbox.MagicBox;
 import cn.jesse.magicbox.R;
 import cn.jesse.magicbox.data.MagicBoxToolData;
+import cn.jesse.magicbox.manager.AopManager;
 import cn.jesse.magicbox.manager.NetworkInfoManager;
 import cn.jesse.magicbox.util.WorkspaceUtil;
 import cn.jesse.magicbox.view.ScrollInsideGridView;
@@ -41,6 +42,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
     private CheckBox cpuCheckBox;
     private CheckBox memCheckBox;
     private CheckBox fpsCheckBox;
+    private CheckBox pageCostingCheckBox;
 
     private RadioButton blockNetRadioButton;
     private RadioButton timeoutNetRadioButton;
@@ -115,10 +117,12 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         cpuCheckBox = findViewById(R.id.cb_cpu);
         memCheckBox = findViewById(R.id.cb_mem);
         fpsCheckBox = findViewById(R.id.cb_fps);
+        pageCostingCheckBox = findViewById(R.id.cb_page_costing);
 
         cpuCheckBox.setOnCheckedChangeListener(this);
         memCheckBox.setOnCheckedChangeListener(this);
         fpsCheckBox.setOnCheckedChangeListener(this);
+        pageCostingCheckBox.setOnCheckedChangeListener(this);
 
         closeNetSimulationRadioButton = findViewById(R.id.rb_net_simulation_close);
         blockNetRadioButton = findViewById(R.id.rb_net_simulation_block);
@@ -143,6 +147,7 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
         cpuCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringCPU());
         memCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringMem());
         fpsCheckBox.setChecked(MagicBox.getPerformanceManager().isMonitoringFPS());
+        pageCostingCheckBox.setChecked(AopManager.getInstance().isAopEnable());
 
         netLogCheckBox.setChecked(MagicBox.getNetworkInfoManager().isRequestLoggerEnable());
 
@@ -242,6 +247,8 @@ public class MagicBoxActivity extends Activity implements CompoundButton.OnCheck
             checkPerformanceMem(checked);
         } else if (i == R.id.cb_fps) {
             checkPerformanceFps(checked);
+        } else if (i == R.id.cb_page_costing) {
+            AopManager.getInstance().setAopEnable(checked);
         } else if (i == R.id.rb_net_simulation_block) {
             checkNetworkBlock(checked);
         } else if (i == R.id.rb_net_simulation_timeout) {
