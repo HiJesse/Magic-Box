@@ -149,11 +149,11 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
         }
 
         netLoggerScrollview.setVisibility(View.VISIBLE);
-        netLoggerTextView.append("CODE: ");
+        netLoggerTextView.append("Code: ");
         netLoggerTextView.append(String.valueOf(loggerData.getCode()));
         netLoggerTextView.append(" Duration: ");
         netLoggerTextView.append(loggerData.getDuration() + "ms");
-        netLoggerTextView.append("  PATH: ");
+        netLoggerTextView.append("  Path: ");
         netLoggerTextView.append(loggerData.getPath());
         netLoggerTextView.append("\n");
         netLoggerScrollview.fullScroll(View.FOCUS_DOWN);
@@ -162,13 +162,13 @@ public class DashboardView implements MagicBox.OnDashboardDataListener {
     @Override
     public void onPageRenderCosting(AopTimeCosting costing) {
         netLoggerScrollview.setVisibility(View.VISIBLE);
-        netLoggerTextView.append("PAGE HASH: ");
-        netLoggerTextView.append(costing.getObjectHashCode());
-        netLoggerTextView.append(" METHOD: ");
-        netLoggerTextView.append(costing.getMethodName());
-        netLoggerTextView.append("  NAME: ");
+        netLoggerTextView.append("Page: ");
         netLoggerTextView.append(costing.getObjectClassName());
-        netLoggerTextView.append(" COSTING: ");
+        netLoggerTextView.append(" Hash: ");
+        netLoggerTextView.append(costing.getObjectHashCode());
+        netLoggerTextView.append(" Method: ");
+        netLoggerTextView.append(costing.getMethodName());
+        netLoggerTextView.append(" Duration: ");
         netLoggerTextView.append(costing.getTimeCosting() + "ms");
         netLoggerTextView.append("\n");
         netLoggerScrollview.fullScroll(View.FOCUS_DOWN);

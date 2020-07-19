@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
 
 import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.manager.AopManager;
-import cn.jesse.magicbox.manager.DashboardDataManager;
 
 /**
  * activity aop
@@ -30,7 +29,7 @@ public class ActivityAop {
         }
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+        AopManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
                 String.valueOf(joinPoint.getThis().hashCode()),
                 joinPoint.getTarget().getClass().getSimpleName(),
                 "onCreate",
@@ -52,7 +51,7 @@ public class ActivityAop {
         }
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+        AopManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
                 String.valueOf(joinPoint.getThis().hashCode()),
                 joinPoint.getTarget().getClass().getSimpleName(),
                 "onDestroy",

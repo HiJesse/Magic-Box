@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
 
 import cn.jesse.magicbox.data.AopTimeCosting;
 import cn.jesse.magicbox.manager.AopManager;
-import cn.jesse.magicbox.manager.DashboardDataManager;
 
 /**
  * android.app.fragment aop
@@ -30,7 +29,7 @@ public class FragmentAop {
         }
         long beforeTime = System.currentTimeMillis();
         Object returnData = joinPoint.proceed();
-        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+        AopManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
                 String.valueOf(joinPoint.getThis().hashCode()),
                 joinPoint.getTarget().getClass().getSimpleName(),
                 "onCreateView",
@@ -53,7 +52,7 @@ public class FragmentAop {
         }
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+        AopManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
                 String.valueOf(joinPoint.getThis().hashCode()),
                 joinPoint.getTarget().getClass().getSimpleName(),
                 "onViewCreated",
@@ -75,7 +74,7 @@ public class FragmentAop {
         }
         long beforeTime = System.currentTimeMillis();
         joinPoint.proceed();
-        DashboardDataManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
+        AopManager.getInstance().updatePageRenderCosting(new AopTimeCosting(
                 String.valueOf(joinPoint.getThis().hashCode()),
                 joinPoint.getTarget().getClass().getSimpleName(),
                 "onDestroyView",

@@ -10,6 +10,8 @@ public class AopTimeCosting {
     private String objectClassName;
     private String methodName;
     private long timeCosting;
+    // 过滤冗余数据用的时间戳
+    private long redundantTimestamp;
 
     public AopTimeCosting() {
         // unused
@@ -20,6 +22,14 @@ public class AopTimeCosting {
         this.objectClassName = objectClassName;
         this.methodName = methodName;
         this.timeCosting = timeCosting;
+    }
+
+    public long getRedundantTimestamp() {
+        return redundantTimestamp;
+    }
+
+    public void setRedundantTimestamp(long redundantTimestamp) {
+        this.redundantTimestamp = redundantTimestamp;
     }
 
     public String getObjectHashCode() {
