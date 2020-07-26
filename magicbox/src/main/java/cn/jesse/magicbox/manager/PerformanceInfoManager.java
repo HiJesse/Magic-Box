@@ -3,7 +3,6 @@ package cn.jesse.magicbox.manager;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 
 import cn.jesse.magicbox.factory.PerformanceJobFactory;
 import cn.jesse.magicbox.job.IJob;
@@ -19,7 +18,6 @@ public class PerformanceInfoManager {
 
     private Handler handler;
     private HandlerThread handlerThread;
-    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     // jobs
     private IJob fpsJob;
@@ -48,6 +46,15 @@ public class PerformanceInfoManager {
         fpsJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_FPS);
         cpuJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_CPU);
         memJob = PerformanceJobFactory.generateJob(PerformanceJobFactory.TYPE_MEM);
+    }
+
+    /**
+     * 获取性能数据处理线程
+     *
+     * @return handler
+     */
+    public Handler getPerformanceHandler() {
+        return handler;
     }
 
     /**

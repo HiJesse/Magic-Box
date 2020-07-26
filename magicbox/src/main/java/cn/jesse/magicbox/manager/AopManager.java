@@ -1,7 +1,6 @@
 package cn.jesse.magicbox.manager;
 
 import android.os.Handler;
-import android.os.HandlerThread;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +20,6 @@ public class AopManager implements Runnable {
     // 用来过滤冗余数据
     private Map<String, AopTimeCosting> pageRenderCostingData;
     private Handler handler;
-    private HandlerThread handlerThread;
 
     // 当前是否支持aop
     private boolean aopEnable;
@@ -62,9 +60,7 @@ public class AopManager implements Runnable {
         this.aopEnable = aopEnable;
         if (pageRenderCostingData == null) {
             pageRenderCostingData = new ConcurrentHashMap<>();
-            handlerThread = new HandlerThread(TAG);
-            handlerThread.start();
-            handler = new Handler(handlerThread.getLooper());
+            handler = PerformanceInfoManager.getInstance().getPerformanceHandler();
             handler.postDelayed(this, DURATION_CHECK_PAGE_RENDER);
         }
     }
