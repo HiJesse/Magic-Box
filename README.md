@@ -22,6 +22,7 @@ MagicBox是一款Android平台的小工具合集, 性能检测, 接口请求控�
     |CPU|开关监控APP的实时CPU使用率|
     |内存|开关监控APP的实时内存使用量|
     |帧率|开关监控APP的实时渲染帧率|
+    |页面耗时|开关监控Activity和Fragment关键方法的耗时|
 
 * 网络辅助(支持3.x okhttp): 支持开关模拟各种网络情况和拦截请求日志.
 
@@ -48,26 +49,35 @@ MagicBox是一款Android平台的小工具合集, 性能检测, 接口请求控�
 |网络拦截器2个|开启网络功能后, 用来模拟和拦截接口请求|
 |系统弹窗权限|需要申请系统弹窗权限, 来进行数据可视化|
 |存储权限|导出沙盒或Crash文件到SD卡时申请|
-|包体积|增大40k左右|
+|包体积|增大100k左右|
 
 ## Gradle接入
 
-根项目`build.gradle`中引入mavenCentral.
+根项目`build.gradle`中引入mavenCentral. 可选引入android-aop依赖, 用来插桩监控页面耗时.
 
 ```
-allprojects {
+buildscript {
     repositories {
         ...
         mavenCentral()
     }
+
+    dependencies {
+        ...
+        // 可选依赖, 利用AspectJ在编译时插桩实现页面耗时监控
+        classpath 'com.github.hijesse:android-aop:1.9.0'
+    }
 }
 ```
 
-Module`build.gradle`中接入Magic-Box.
+Module`build.gradle`中接入Magic-Box. 可选插入android-aop依赖插件, 引入插件后该module内的页面在编译期会被AOP插桩, 用来监控页面耗时.
 
 ```
+// 可选插件, 同上
+apply plugin: 'cn.jesse.aop.android-aop'
+
 dependencies {
-    compile 'com.github.hijesse:magic-box:1.0.0'
+    compile 'com.github.hijesse:magic-box:1.1.0'
 }
 ```
 
@@ -173,6 +183,8 @@ dependencies {
         MagicBox.getPerformanceManager().startMonitorCPU();
         MagicBox.getPerformanceManager().startMonitorMem();
         MagicBox.getPerformanceManager().startMonitorFPS();
+        // 页面耗时监控需要配合android-aop插件引入
+        AopManager.getInstance().setAopEnable(true);
         ```
 
         ```
@@ -180,6 +192,7 @@ dependencies {
         MagicBox.getPerformanceManager().stopMonitorCPU();
         MagicBox.getPerformanceManager().stopMonitorMem();
         MagicBox.getPerformanceManager().stopMonitorFPS();
+        AopManager.getInstance().setAopEnable(false);
         ```
 
         ```
@@ -205,6 +218,13 @@ dependencies {
             * @param loggerData 拦截日志
             */
             void onHttpRequestLog(RequestLoggerData loggerData);
+
+            /**
+            * 页面渲染等耗时回调
+            *
+            * @param costing 耗时信息
+            */
+            void onPageRenderCosting(AopTimeCosting costing);
         }
         ```
 
