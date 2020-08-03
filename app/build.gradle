@@ -57,6 +57,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation rootProject.ext.dep['appcompat']
 
-    api project(path: ':magicbox')
+//    api project(path: ':magicbox')
+    implementation 'com.github.hijesse:magic-box:1.1.1'
     implementation rootProject.ext.dep['okhttp']
 }

@@ -77,7 +77,7 @@ Module`build.gradle`中接入Magic-Box. 可选插入android-aop依赖插件, 引
 apply plugin: 'cn.jesse.aop.android-aop'
 
 dependencies {
-    compile 'com.github.hijesse:magic-box:1.1.0'
+    compile 'com.github.hijesse:magic-box:1.1.1'
 }
 ```
 
